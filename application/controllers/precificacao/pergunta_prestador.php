@@ -11,15 +11,17 @@ class Pergunta_Prestador extends MY_Restrita {
         $this->load->model('ModeloList/ListaProf_pergunta_respostas');
         $this->load->model('ModeloList/ListaSubcategorias');
     }
-	
+    
+    public function pergunta(){
+
+    }
+
 	public function iniciar(){
-		$id_profissional = $this->session->userdata('id_profissional');
+        $id_profissional = $this->session->userdata('id_profissional');
 		$ProfSubCatgs = $this->ListaProf_subcategs->getProfSubcatByProfAndSubcatg($id_profissional);
 		$arrTodasPerguntas = array();
 		foreach($ProfSubCatgs as $key1 => $ProfSubCatg){
-			$SubCategoria = $this->ListaSubcategorias->get($ProfSubCatg->id_subcategoria);
-			
-			$Enunciados = $this->ListaProf_enunciado->getProf_enunciadoBySubcategoria($ProfSubCatg->id_subcategoria );
+			$Enunciados = $this->ListaProf_enunciado->getProf_enunciadoBySubcategoria($ProfSubCatg->id_subcategoria);
 			foreach($Enunciados as $key2 => $Enun){
 				$arrTodasPerguntas[] =  $ProfSubCatg->id_subcategoria.'/'.$Enun->id_prof_enunciado.'/'.$Enun->ordem;
 				
@@ -89,7 +91,15 @@ class Pergunta_Prestador extends MY_Restrita {
 		//if ($this->finalizar($possicao_array))
 			//redirect('restrita/prof/mensagem/finalizado');
 		//redirect('restrita/prof/pergunta/proxima/'. $possicao_array);
-	}
+    }
+    
+    public function getPaginationSubCategoria(){
+
+    }
+
+    public function getPaginationEnunciadoPerguntas(){
+        
+    }
 	
 	public function proxima($possicao_array){
 		$arrTodasPerguntas = $this->session->userdata('arrTodasPerguntas');
