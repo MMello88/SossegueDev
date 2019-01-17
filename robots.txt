@@ -1,0 +1,14 @@
+User-agent: *
+
+Disallow: /restrita
+Disallow: /busca
+Disallow: /profissional
+Disallow: /agendamento
+Disallow: /search
+DIsallow: /agendamentos
+Disallow: /login
+Disallow: /uploads
+Disallow: /pedidos/realizar
+Disallow: /cadastro/pedidos
+
+Sitemap: http://www.sossegue.com.br/sitemap.xml

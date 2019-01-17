@@ -1,0 +1,89 @@
+/*//////////////////////////////////////////////////////////////////////////////////////////*/
+/* COLOR CSS 2*/
+/*//////////////////////////////////////////////////////////////////////////////////////////*/
+
+
+a,
+.color_primary,
+.list-services__item:hover .list-services__title,
+.list-progress_mod-a .percent,
+.gallery__categorie,
+.reviews__title:before,
+.advantages__item:hover .icon,
+.footer-list__link:hover,
+.price:hover .price__title,
+.price:hover .price__number,
+.pagination > li:first-child > a:hover,
+.pagination > li:first-child > span:hover,
+.pagination > li:last-child > a:hover,
+.pagination > li:last-child > span:hover,
+.main-slider .icon.color_primary,
+.list-widget__link:hover:before,
+.list-widget__link:hover:hover:before,
+.post-nav__item .icon,
+.post-nav__item:hover .post-nav__name,
+.p-404 .icon {color: #38abf4;}
+
+
+.bg-color_primary,
+.header-main__inner,
+.social-links > li > a:hover,
+.decor-1,
+.section-banner-1,
+.btn:after,
+.list-services__item:hover .icon,
+.staff__item:hover .staff__title,
+.owl-theme .owl-controls .owl-page.active span,
+.owl-theme .owl-controls.clickable .owl-page:hover span,
+.filter li a:hover,
+.section_mod-b,
+.footer-form,
+.header.sticky .navbar,
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.list-services-2__bg,
+.post .entry-date__inner,
+.form-request_mod-a,
+.section-bg-img_mod-c:after,
+.accordion .panel-default .panel-heading,
+.price .icon,
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus,
+.form-request_mod-b .btn,
+.yamm .navbar-toggle {background-color: #38abf4;}
+
+.social-links > li > a:hover,
+.list-block__link:hover,
+.list-services__item:hover .icon,
+.filter li a:hover,
+.advantages__item:hover .icon,
+.foto-link,
+.price__number,
+.btn-info:hover,
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus,
+.list-contacts__title {border-color: #38abf4;}
+
+
+.footer-list__link:hover:before,
+.list-description dt:before,
+.list-mark li:before,
+blockquote,
+.comments-list .comment-btn:before {border-left-color: #38abf4;}
+
+.price .icon:after {
+	border-top-color: #38abf4;
+}
+
+.yamm .nav > li:hover {
+	box-shadow: 0 4px 0 0 #38abf4;
+}
+

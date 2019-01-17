@@ -1,0 +1,201 @@
+.section-area {
+	position: relative;
+}
+.section-default {
+	position: relative;
+	padding-top: 85px;
+}
+
+.section__inner {
+	position: relative;
+	z-index: 10;
+}
+
+.section-bg {
+	position: relative;
+}
+.section-bg-img:after {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	content: '';
+}
+.section-bg-img_mod-a:after {
+	background: rgba(0,0,0,0.7);
+}
+.section-bg-img_mod-b:after {
+	background: rgba(255,255,255,0.9);
+}
+.section-bg-img_mod-c:after {
+	opacity: 0.8;
+}
+
+.section-bg_mod-a {
+	background-image: url('../media/bg/3.jpg');
+	background-size: cover;
+}
+.section-bg_mod-b {
+	margin-top: 150px;
+	background-image: url('../media/bg/6.jpg');
+	background-size: cover;
+}
+.section-bg_mod-c {
+	padding-bottom: 60px;
+	background: url('../media/bg/5.png') no-repeat 100% 100%;
+	background-size: contain;
+}
+.section-bg_mod-d {
+	margin-right: 38px;
+	padding-bottom: 50px;
+	background: url('../media/bg/7.png') no-repeat 100% 100%;
+	background-size: contain;
+}
+
+.section-title {
+	margin-top: -10px;
+	padding-top: 64px;
+	padding-bottom: 60px;
+	background: url('../media/bg/bg-title.jpg') no-repeat 50% 0;
+	background-size: cover;
+	text-align: center;
+}
+
+.section_mod-a {
+	padding-bottom: 340px;
+	background: url('../media/bg/1.jpg') no-repeat 50% 100%;
+}
+
+.section_mod-b {
+	position: relative;
+	overflow: hidden;
+}
+.section_mod-b:after {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url('../media/bg/texture_wood-1.jpg');
+	opacity: 0.4;
+	content: '';
+}
+.section_mod-c {
+	position: relative;
+	margin-left: -30px;
+	padding-top: 103px;
+	padding-left: 70px;
+}
+.section_mod-c:after {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1000px;
+	height: 1000px;
+	background-color: #f4f4f4;
+	z-index: 1;
+	content: '';
+}
+.section_mod-d {
+	position: relative;
+	padding-top: 100px;
+}
+.section_mod-e {
+	padding-bottom: 86px;
+}
+.section_mod-e .decor-1 {
+	margin-top: 10px;
+	margin-bottom: 55px;
+}
+.section_mod-f {
+	background-color: #f4f4f4;
+}
+.section_mod-g {
+	position: relative;
+	padding-top: 27px;
+	padding-bottom: 255px;
+	background: url('../media/bg/1.jpg') no-repeat 50% 100%;
+}
+.section_mod-h {
+	padding-bottom: 65px;
+}
+.section_mod-i {
+	position: relative;
+	padding-top: 85px;
+	padding-bottom: 65px;
+	background-size: contain;
+	background: #f4f4f4 url('../media/bg/8.png') no-repeat 100% 100%;
+}
+.section_mod-j {
+	padding-bottom: 110px;
+}
+
+
+.section-banner-1 {
+	position: relative;
+}
+.section-banner-1:after {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url('../media/bg/texture_wood-1.jpg');
+	opacity: 0.4;
+	content: '';
+}
+
+.section-banner-2 {
+	position: relative;
+	background-color: #222;
+}
+.section-banner-2:after {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,rgba(255,255,255,0.05)), color-stop(50%,rgba(255, 255, 255, 0.05)), color-stop(50%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,1)));
+	background: -webkit-linear-gradient(-71deg,  rgba(255,255,255,0.05) 0%,rgba(255, 255, 255, 0.05) 50%,rgba(255, 255, 255, 0) 50%,rgba(255, 255, 255, 0) 100%);
+	background:         linear-gradient(-71deg,  rgba(255,255,255,0.05) 0%,rgba(255, 255, 255, 0.05) 50%,rgba(255, 255, 255, 0) 50%,rgba(255, 255, 255, 0) 100%);
+	opacity: 0.4;
+	content: '';
+}
+
+.section-list-services {
+	padding-top: 105px;
+	text-align: center;
+}
+
+.section-staff {
+	margin-bottom: 200px;
+	padding-top: 65px;
+	background-color: #f4f4f4;
+}
+.section-staff_title {
+	position: relative;
+	padding-bottom: 30px;
+}
+
+.section-reviews {
+	padding-top: 87px;
+	padding-bottom: 90px;
+	background-image: url('../media/bg/4.jpg');
+	background-size: cover;
+}
+
+.section-form-request {
+	margin-top: -142px;
+	margin-left: -69px;
+}
+
+.section-list-block {
+	position: relative;
+	margin-left: 42px;
+}
+
+.section-reply-form {
+	margin-top: 80px;
+	padding-bottom: 100px;
+}

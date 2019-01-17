@@ -1,0 +1,270 @@
+/*------------------------------------------------------------------
+[Master Stylesheet]
+
+Project:	Powerman
+Version:	1.0
+Assigned to:	WebNik
+Primary use:	Powerman
+-------------------------------------------------------------------*/
+
+/* FONTS*/
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,900,400italic|Roboto+Condensed:400,700);
+@import url('../fonts/font-awesome/css/font-awesome.min.css');
+@import url('../fonts/simple/simple-line-icons.css');
+@import url('../fonts/flaticon/flaticon.css');
+
+/* PLUGIN CSS */
+@import url('../plugins/bootstrap/css/bootstrap.css');
+@import url('../plugins/isotope/isotope.css');
+@import url('../plugins/owl-carousel/owl.carousel.css');
+@import url('../plugins/owl-carousel/owl.transitions.css');
+@import url('../plugins/owl-carousel/owl.theme.css');
+@import url('../plugins/prettyphoto/css/prettyPhoto.css');
+@import url('../plugins/yamm/yamm.css');
+@import url('../plugins/loader/css/loader.css');
+@import url('../plugins/datetimepicker/jquery.datetimepicker.css');
+/*@import url('../plugins/animate/animate.css');*/
+@import url('../plugins/validation/validation-2.2.min.css');
+@import url('../plugins/slider-pro/dist/css/slider-pro.css');
+@import url('../plugins/hover-effect-ideas/css/set1.css');
+@import url('../plugins/ihover/src/ihover.css');
+
+
+/* MAIN CSS */
+@import url('theme.css');
+@import url('sections.css');
+@import url('sidebar.css');
+@import url('blog.css');
+@import url('responsive.css');
+@import url('color.css');
+/*@import url('debugging.css');*/
+
+#busca li {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    float: left;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    overflow: hidden;
+    width: 100%;
+    padding: 10px;
+    background-color: #f2f2f2;
+}
+#busca li:hover {
+    -webkit-box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.5);
+    box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.5);
+}
+
+#busca a {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+#busca a:hover {
+    text-decoration: none;
+}
+
+#busca .info {
+    max-width: 75%;
+}
+
+#busca .foto {
+    margin-right: 5%;
+    max-width: 20%;
+}
+
+#busca .info span {
+    display: inline-block;
+    height: 20px;
+}
+
+#busca p {
+    font-weight: normal;
+    margin-right: 20px;
+}
+
+#busca .descricao {
+    color: #666;
+}
+
+.fotoBusca {
+    color: grey;
+    font-size: 5.6em;
+    padding: 10px;
+    margin-right: 20px;
+}
+
+.dropzone .dz-default.dz-message{
+  background-image: url(../plugins/dropzone/images/default-msg.png) !important;
+  height: 56px !important;
+  margin-left: -156px !important;
+  margin-top: -20px !important;
+  width: 313px !important;
+}
+.dropzone{
+  min-height: 170px;
+}
+
+.gallery-cont .item {
+  width: 25%;
+  margin-bottom: 20px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.gallery-cont .item.w2 {
+  width: 50%;
+}
+.gallery-cont .photo {
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.13);
+}
+.gallery-cont .img {
+  position: relative;
+}
+.gallery-cont .img .over .func {
+  margin-top: -80px;
+  position: relative;
+  top: 50%;
+  text-align: center;
+  transition: margin-top 200ms ease-in-out;
+}
+.gallery-cont .img .over .func a {
+  display: inline-block;
+  height: 50px;
+  margin-right: 2px;
+  width: 50px;
+  margin-right: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+.gallery-cont .img .over .func a:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.gallery-cont .img .over .func i {
+  font-size: 20px;
+  color: #FFF;
+  line-height: 2.4;
+}
+.gallery-cont .item .img:hover .over {
+  opacity: 1;
+}
+.gallery-cont .item .img:hover .over .func {
+  margin-top: -25px;
+}
+.gallery-cont .item .head {
+  padding: 10px 10px;
+  background: #FFF;
+}
+.gallery-cont .item .head h4 {
+  margin: 0;
+  font-size: 17px;
+}
+.gallery-cont .item .head span {
+  color: #BDBDBD;
+  font-size: 14px;
+}
+.gallery-cont .item .head span.active {
+  color: #8b75bb;
+}
+.gallery-cont .item .head .desc {
+  color: #999;
+  font-size: 12px;
+}
+.gallery-cont .item img {
+  width: 100%;
+}
+/*Photo Hover*/
+.gallery-cont .item .over {
+  top: 0;
+  opacity: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: rgba(46, 47, 38, 0.7);
+  transition: opacity 300ms ease;
+  -webkit-transition: opacity 300ms ease;
+}
+
+.galeria{
+  clear: both;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+.galeria img {
+  cursor: grab;
+}
+.gallery-cont.editar .item{
+  float: left;
+  margin: 0 9px 18px 9px;
+  padding: 0;
+}
+.gallery-cont.editar .item,
+.gallery-cont.editar img {
+    width: 251px;
+}
+.gallery-cont.editar .img .over .func i{
+  font-size: 14px;
+  line-height: 2.2;
+}
+.gallery-cont.editar .img .over .func a{
+  height: 30px;
+  margin: 8px 4px 0;
+  width: 30px;
+}
+
+.modal {
+    margin-top: 80px;
+}
+
+.modal-backdrop.in {
+    filter: alpha(opacity=0) !important;
+    opacity: 0 !important;
+    position: inherit !important;
+}
+
+.notaRadio {
+    margin-bottom: 10px;
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 10px;
+}
+
+.notaRadio label {
+    cursor: pointer;
+}
+
+.note-editor {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.note-editor .btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+optgroup {
+    color: #666 !important;
+}
+
+.reviews__img {
+    background-color: #fff;
+}
+
+.reviews__img > img {
+    margin: 0 auto;
+}
+
+.word-wrap-select{
+    word-wrap: break-word;
+    text-overflow: inherit;
+    white-space: normal;
+    height: 60px;
+}
+
+.form-btn-submit{
+  margin-left:10px; 
+  margin-right:10px;
+  width: 95%;
+}

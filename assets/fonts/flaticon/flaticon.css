@@ -1,0 +1,102 @@
+@font-face {
+	font-family: "Flaticon";
+	src: url("flaticon.eot");
+	src: url("flaticon.eot#iefix") format("embedded-opentype"),
+	url("flaticon.woff") format("woff"),
+	url("flaticon.ttf") format("truetype"),
+	url("flaticon.svg") format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+
+  src: url('glyphicons-halflings-regular.eot');
+  src: url('glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), 
+  url('glyphicons-halflings-regular.woff2') format('woff2'), 
+  url('glyphicons-halflings-regular.woff') format('woff'), 
+  url('glyphicons-halflings-regular.ttf') format('truetype'), 
+  url('glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {
+	font-family: Flaticon;
+font-style: normal;
+}.flaticon-badges3:before {
+	content: "\e000";
+}
+.flaticon-clean15:before {
+	content: "\e001";
+}
+.flaticon-computerscreen11:before {
+	content: "\e002";
+}
+.flaticon-couch5:before {
+	content: "\e003";
+}
+.flaticon-edit26:before {
+	content: "\e004";
+}
+.flaticon-flash31:before {
+	content: "\e005";
+}
+.flaticon-folder286:before {
+	content: "\e006";
+}
+.flaticon-hammer6:before {
+	content: "\e007";
+}
+.flaticon-home17:before {
+	content: "\e008";
+}
+.flaticon-house158:before {
+	content: "\e009";
+}
+.flaticon-lightbulb34:before {
+	content: "\e00a";
+}
+.flaticon-paint3:before {
+	content: "\e00b";
+}
+.flaticon-painter23:before {
+	content: "\e00c";
+}
+.flaticon-painter32:before {
+	content: "\e00d";
+}
+.flaticon-rocketship4:before {
+	content: "\e00e";
+}
+.flaticon-tool136:before {
+	content: "\e00f";
+}
+.flaticon-tool292:before {
+	content: "\e010";
+}
+.flaticon-wiping16:before {
+	content: "\e011";
+}
+.flaticon-working1:before {
+	content: "\e012";
+}
+.flaticon-wrench1:before {
+	content: "\e013";
+}
+.glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.glyphicon-shopping-cart:before {
+  content: "\e116";
+}
+.glyphicon-shopping-cart          { &:before { content: "\e116"; } }

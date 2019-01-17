@@ -1,0 +1,469 @@
+/*
+ORGANIZAÇÃO BÁSICA
+    .selector {
+        1. Posicionamento
+        2. Formato
+        3. Cores
+        4. Tipologia
+        5. Outros
+    }
+
+
+CORES
+		cinza          - #aaaaaa
+		laranja escuro - #ce4a00
+		laranja claro  - #f95900
+ */
+
+/*******************************************************************************
+    CLASSES ÚTEIS
+*******************************************************************************/
+/* Exibição */
+.hidden {display: none;}
+
+/* Alinhamento */
+.fll {float:left;}
+.flr {float:right;}
+.m0a {display:block; margin:0 auto;}
+.tal {text-align: left !important;}
+.tar {text-align: right !important;}
+.tac {text-align: center !important;}
+.mid {
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+}
+
+/* Margem */
+.mb0  {margin-bottom: 0px !important;}
+.mb10 {margin-bottom: 10px !important;}
+.mb20 {margin-bottom: 20px !important;}
+.mb40 {margin-bottom: 40px !important;}
+.mb80 {margin-bottom: 80px !important;}
+
+/* Clearfix */
+.clearfix:before,
+.clearfix:after {
+ content: " ";
+ display: table;
+}
+
+.clearfix:after {clear: both; }
+.clearfix {*zoom: 1; }
+
+
+/*******************************************************************************
+    MENSAGENS DE ALERTA
+*******************************************************************************/
+/* Estrutura */
+.alert {
+	margin: 0 0 20px 0;
+	padding: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+/* Erro */
+.alert-error {
+    border-color: #ebccd1;
+	background-color: #f2dede;
+	color: #a94442;
+}
+
+.alert-error p {
+	margin: 0 !important;
+}
+
+
+/*******************************************************************************
+    GERAL
+*******************************************************************************/
+/* Estrutura */
+*,
+:after,
+:before{
+    box-sizing: border-box;
+}
+
+html,
+body {
+    position: relative;
+}
+
+body {
+	background: #fff;
+    color: #7e7e7e;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    overflow: hidden;
+}
+
+/* Botoes */
+.btn {
+	display: inline-block;
+	height: 40px;
+	padding: 0 20px;
+	border-radius: 20px;
+	border: 0;
+	color: #fff;
+	font-size: 12px;
+	text-decoration: none;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	line-height: 40px;
+	cursor: pointer;
+
+	transition: all 300ms ease;
+}
+
+
+.btn.cinza { background-color: #aaaaaa;}
+.btn.cinza:hover { background-color: #D0D0D0;}
+
+.btn.laranja { background-color: #f95900;}
+.btn.laranja:hover { background-color: #d6682a;}
+
+/* Formularios */
+input, textarea {
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+}
+
+
+/*******************************************************************************
+    HEADER
+*******************************************************************************/
+/* Estrutura */
+header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 170px;
+	margin: 0;
+	padding: 30px;
+	background: #ededed;
+	z-index: 100;
+}
+
+.main header {
+	padding: 15px 0 0 0;
+}
+
+/* Logo */
+header .logo {
+	margin: 0 auto;
+	width: auto;
+	height: 110px;
+}
+
+.main header .logo {
+	height: 90px;
+}
+
+/* Barra */
+.main header .bar {
+	position: relative;
+	width: 100%;
+	height: 50px;
+	margin: 15px 0 0 0;
+	background: #aaa;
+}
+
+.main header .bar .user-info {
+	position: relative;
+	left: 0;
+	padding: 10px;
+}
+
+.main header .bar .user-info .user-photo {
+	position: absolute;
+	height: 30px;
+	border-radius: 50%;
+}
+
+.main header .bar .user-info .user-name {
+	position: absolute;
+	left: 50px;
+	height: 30px;
+	color: #fff;
+	font-size: 18px;
+	line-height: 30px;
+}
+
+.main header .bar .logout {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	height: 30px;
+	line-height: 30px;
+}
+
+
+/*******************************************************************************
+    GERAL
+*******************************************************************************/
+/* Estrutura */
+.container {
+	position: absolute;
+	top: 170px;
+	left: 0;
+	width: 100%;
+	height: calc(100% - 200px);
+	margin: 0;
+	padding: 0;
+	overflow-y: scroll;
+}
+
+.main .container {
+	height: calc(100% - 230px);
+}
+
+/* Titulos */
+.container h2 {
+	margin: 0 0 20px 0;
+	font-size: 24px;
+	font-weight: 700;
+	text-align: center;
+}
+
+/* Textos */
+.container p {
+	margin: 0 0 20px 0;
+	text-align: center;
+	line-height: 20px;
+}
+
+
+/*******************************************************************************
+    MAIN
+*******************************************************************************/
+/* Mensagens */
+.main .mensagens {
+    padding: 20px 10px;
+    height: 100%;
+    overflow-y: auto;
+    text-align: center;
+}
+
+.main .mensagens div {
+    display: block;
+}
+
+.main .mensagens .atendente {
+    padding: 0 20% 0 0;
+    text-align: left;
+}
+
+.main .mensagens .cliente {
+    padding: 0 0 0 20%;
+    text-align: right;
+}
+
+.main .mensagens div p {
+    display: inline-block;
+    margin: 0 0 15px 0;
+    padding: 7px 12px;
+    box-shadow: 0 0 6px #E6E6E6;
+    text-align: left;
+}
+
+.main .mensagens .atendente p {
+    background: #F2F2F2;
+    border-radius: 0px 10px 10px;
+    border: 1px solid #dedede;
+    color: #555;
+}
+
+.main .mensagens .cliente p {
+    background: #fdfdfd;
+    border-radius: 10px 10px 0px 10px;
+    border: 1px solid #dedede;
+}
+
+.main .mensagens .logout-msg {
+    display: inline-block;
+    margin: 0 0 20px 0;
+    padding: 10px;
+    border-radius: 10px;
+    background: #dedede;
+    font-size: 12;
+}
+
+/* Typing */
+.main .mensagens .typing {
+	position: absolute;
+    bottom: 0;
+    left: 0;
+    display: none;
+}
+
+.main .mensagens .typing p {
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0 5px 0 0;
+    box-shadow: none;
+	background: #ededed;
+    font-size: 12px;
+}
+
+
+/*******************************************************************************
+    LOGIN
+*******************************************************************************/
+/* Estrutura */
+.login .container {
+	padding: 40px 5% 20px 5%;
+}
+
+/* Formulario */
+.login select,
+.login input[type="text"] {
+	width: 100%;
+	height: 40px;
+	margin: 5px 0px;
+	padding: 13px 8px;
+	border: 0;
+	border-radius: 3px;
+	background: #ededed;
+	color: #7e7e7e;
+	font-size: 13px;
+}
+
+.login select option {
+	color: #7e7e7e;
+}
+
+.login label {
+	display: block;
+	margin: 10px 0 20px;
+}
+
+.login textarea {
+	display: block;
+	width: 80%;
+	margin: 0 auto;
+	padding: 10px;
+	border-radius: 10px;
+	border-color: #aaa;
+}
+
+.login input[type="submit"] {
+	display: block;
+	margin: 30px auto 0;
+}
+
+/* Social */
+.login #bt_login_facebook,
+.login #bt_login_google {
+	display: inline-block;
+	height: 32px;
+	margin: 0 0 10px 0;
+	padding: 0 10px 0 37px;
+	border-radius: 5px;
+	color: #fff;
+	text-decoration: none;
+	font-size: 13px;
+	line-height: 32px;
+}
+
+.login #bt_login_facebook {
+	padding-left: 23px;
+	background: #3971af url('http://www.sossegue.com.br/assets/img/bt_facebook.png') no-repeat center left;
+}
+
+.login #bt_login_google {
+	background: #e85949 url('http://www.sossegue.com.br/assets/img/bt_google.png') no-repeat center left;
+}
+
+
+/*******************************************************************************
+    LOGOUT
+*******************************************************************************/
+fieldset, label { margin: 0; padding: 0; }
+
+/****** Style Star Rating Widget *****/
+.rating {
+	border: none;
+	text-align: center;
+	margin: -20px auto 0;
+	width: 150px;
+}
+
+.rating > input { display: none; }
+.rating > label:before {
+	content: "\e804";
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	font-size: 1.5em;
+	font-family: "fontello";
+	line-height: 30px;
+	cursor: pointer;
+}
+
+.rating > label {
+	color: #ddd;
+	display: inline-block;
+	float: right;
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating > input:checked ~ label, /* show gold star when clicked */
+.rating:not(:checked) > label:hover, /* hover current star */
+.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+
+.rating > input:checked + label:hover, /* hover current star when changing rating */
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label { color: #FFED85;  }
+
+
+/*******************************************************************************
+    FOOTER
+*******************************************************************************/
+/* Estrutura */
+footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 30px;
+	border-top: 1px solid #ededed;
+	background: #fff;
+	font-size: 11px;
+	line-height: 30px;
+	text-align: center;
+	z-index: 100;
+}
+
+.main footer {
+	height: auto;
+	padding: 10px;
+	background: #ededed;
+}
+
+/* Links */
+footer a {
+	color: #7e7e7e;
+}
+
+/* Formulario */
+.main footer .msg_input {
+	display: block;
+	width: 100%;
+	height: 40px;
+	max-height: 100px;
+	margin: 0;
+	padding: 10px;
+	border: none;
+	border-radius: 6px;
+}
+
+
+
