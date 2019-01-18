@@ -1,7 +1,9 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Pergunta_Prestador extends MY_Restrita {
-	
+    
+    private $conf_pagination;
+
 	public function __construct() {
         parent::__construct();
         $this->output->enable_profiler(TRUE);
@@ -10,9 +12,56 @@ class Pergunta_Prestador extends MY_Restrita {
         $this->load->model('ModeloList/ListaProf_perguntas');
         $this->load->model('ModeloList/ListaProf_pergunta_respostas');
         $this->load->model('ModeloList/ListaSubcategorias');
+        
+        $this->conf_pagination['base_url'] = base_url("restrita/prof/pergunta/");
+        
+        $this->conf_pagination['full_tag_open'] = '<ul class="pagination"><li></li>';
+        $this->conf_pagination['full_tag_close'] = '<li></li></ul>';
+        
+        $this->conf_pagination['prev_tag_open'] = '<li>';
+        $this->conf_pagination['prev_tag_close'] = '</li>';
+        
+        $this->conf_pagination['next_tag_open'] = '<li>';
+        $this->conf_pagination['next_tag_close'] = '</li>';
+        
+        $this->conf_pagination['cur_tag_open'] = '<li class="active"><a href="#">';
+        $this->conf_pagination['cur_tag_close'] = '</a></li>';
+
+        $this->conf_pagination['num_tag_open'] = '<li>';
+        $this->conf_pagination['num_tag_close'] = '</li>';
+
+		$this->conf_pagination['first_tag_open'] = '<li>';
+        $this->conf_pagination['first_tag_close'] = '</li>';
+        
+        $this->conf_pagination['links'] = "";
     }
     
-    public function pergunta(){
+    public function getPaginationSubCategoria($idSubcategoria){
+        $id_profissional = $this->session->userdata('id_profissional');
+        $ProfSubCatgs = $this->ListaProf_subcategs->getProfSubcatByProfAndSubcatg($id_profissional);
+        
+        $this->conf_pagination['total_rows'] = count($ProfSubCatgs);
+        $this->conf_pagination['per_page'] = 1;
+        $this->conf_pagination['cur_page'] = $idSubcategoria;
+        $this->conf_pagination['num_links'] = count($ProfSubCatgs);
+
+        extract($this->conf_pagination);
+
+        $html = $full_tag_open;
+        foreach ($ProfSubCatgs as $key => $subCatg) {
+            if($subCatg->id_subcategoria = $idSubcategoria)
+                $html .= cur_tag_open . $base_url . $subCatg->id_subcategoria . "/1" . cur_tag_close;
+        }
+        $html = $full_tag_close;
+
+        return "";
+    }
+
+    public function getPaginationEnunciadoPerguntas($idEnunciado){
+        
+    }
+
+    public function pergunta($idSubcategoria, $idEnunciado){
 
     }
 
@@ -91,14 +140,6 @@ class Pergunta_Prestador extends MY_Restrita {
 		//if ($this->finalizar($possicao_array))
 			//redirect('restrita/prof/mensagem/finalizado');
 		//redirect('restrita/prof/pergunta/proxima/'. $possicao_array);
-    }
-    
-    public function getPaginationSubCategoria(){
-
-    }
-
-    public function getPaginationEnunciadoPerguntas(){
-        
     }
 	
 	public function proxima($possicao_array){
