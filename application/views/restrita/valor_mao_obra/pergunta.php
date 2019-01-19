@@ -38,7 +38,6 @@
 <?php } ?>
 
 <?php echo  form_open("restrita/prof/resposta/gravar", array("id" => "formsubcatgPergunta")); ?>
-<input type="hidden" name="possicao_array" value="<?= $possicao_array; ?>" >
 <input type="hidden" name="id_prof_subcateg" value="<?php echo $ProfSubCatg->id_prof_subcateg; ?>">
 <input type="hidden" name="id_prof_enunciado" value="<?php echo $ProfSubCatg->Enunciado->id_prof_enunciado; ?>">
 <input type="hidden" name="id_subcategoria" value="<?php echo $ProfSubCatg->Enunciado->id_subcategoria; ?>">
@@ -47,97 +46,62 @@
 
 <?php 
 	foreach ($ProfSubCatg->Enunciado->Perguntas as $key => $pergunta) { 
-		$vlr_primeiro = "";
-		$vlr_adicional = "";
-		$vlr_porcent = "";
-		$qntd = "";
-		$checkbox = "";
-		$faz_servico = "";
-		$respondido = "";
-		$id_prof_pergunta_resposta = "";
-		$tipo = "";
-    $readonly = "";
-		$resposta = $pergunta->Resposta;
-    if (isset($resposta)){
-  		if ($resposta->id_prof_pergunta == $pergunta->id_prof_pergunta){
-  			$id_prof_pergunta_resposta = $resposta->id_prof_pergunta_resposta;
-  			$vlr_primeiro = $resposta->vlr_primeiro;
-  			$vlr_adicional = $resposta->vlr_adicional;
-  			$vlr_porcent = $resposta->vlr_porcent;
-  			$qntd = $resposta->qntd;
-  			$checkbox = empty($resposta->checkbox) ? "" : $resposta->checkbox == "S" ? "checked" : "";
-        $faz_servico = empty($resposta->faz_servico) ? "" : $resposta->faz_servico == "S" ? "checked" : "";
-        $readonly = empty($resposta->faz_servico) ? "" : $resposta->faz_servico == "S" ? "readonly" : "";
-  			$respondido = $resposta->respondido; 
-  		}
-    }
-      
-    
+    $checkbox    = empty($pergunta->checkbox)    ? "" : $pergunta->checkbox    == "S" ? "checked"  : "";
+    $faz_servico = empty($pergunta->faz_servico) ? "" : $pergunta->faz_servico == "S" ? "checked"  : "";
+    $readonly    = empty($pergunta->faz_servico) ? "" : $pergunta->faz_servico == "S" ? "readonly" : ""; 
+
+    $class_check = "c".$pergunta->id_prof_pergunta;
+    $class_vp    = "vp".$pergunta->id_prof_pergunta;
+    $class_va    = "va".$pergunta->id_prof_pergunta;
+    $class_qtde  = "qtde".$pergunta->id_prof_pergunta;    
   ?>
 
-<input type="hidden" name="id_prof_pergunta_resposta[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $id_prof_pergunta_resposta ?>">
-<input type="hidden" name="id_prof_pergunta[]" value="<?php echo $pergunta->id_prof_pergunta; ?>">
-
-
-<?php 
-if (!empty($pergunta->sinal))
-  echo "<input type=\"hidden\" name=\"sinal[{$pergunta->id_prof_pergunta}]\" value=\"{$pergunta->sinal}\">";
-if ($pergunta->sn_vlr_sinal == 'S')
-  echo "<input type=\"hidden\" name=\"sn_vlr_sinal[{$pergunta->id_prof_pergunta}]\" value=\"S\">";
-echo "<input type=\"hidden\" name=\"tipo[{$pergunta->tipo}]\" value=\"{$pergunta->tipo}\">";
-?>
+<input type="hidden" name="id_prof_pergunta_resposta[<?= $pergunta->id_prof_pergunta; ?>]" value="<?= $pergunta->id_prof_pergunta_resposta ?>">
+<input type="hidden" name="id_prof_pergunta[]" value="<?= $pergunta->id_prof_pergunta; ?>">
 
 
   <!-- pergunta inicial / não -->
   <?php if($pergunta->perg_ini == "N") { ?>
 
 
-  <?php if (!empty(trim($pergunta->pergunta))) { ?>
+  <?php if (!empty($pergunta->pergunta)) { ?>
     <div class="w3-panel w3-yellow">
-      <h5 class="w3-opacity"><?php echo $pergunta->pergunta; ?></h5>
+      <h5 class="w3-opacity"><?= $pergunta->pergunta ?></h5>
     </div>
   <?php } ?>
 
-
   <div class="w3-row-padding">
-  <?php
-    $class_check = "c".$pergunta->id_prof_pergunta;
-    $class_vp = "vp".$pergunta->id_prof_pergunta;
-    $class_va = "va".$pergunta->id_prof_pergunta;
-    $class_qtde = "qtde".$pergunta->id_prof_pergunta;
-  ?>
-
     <?php if($pergunta->tem_vlr_qntd == "S") { ?>
       <?php if($pergunta->tem_vlr_primeiro == "S") { ?>
 
       <div class="w3-third">
         <label>Primeiro</label>
-        <input class="w3-input w3-border" id="<?= $class_vp; ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_primeiro[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $vlr_primeiro; ?>" <?= $readonly ?> >
+        <input class="w3-input w3-border" id="<?= $class_vp; ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_primeiro[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_primeiro ?>" <?= $readonly ?> >
       </div>
       <div class="w3-third">
         <label>Quantidade</label>
-        <input class="w3-input w3-border" id="<?= $class_qtde; ?>" type="text" placeholder="Ex. 12" name="qntd[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $qntd; ?>" <?= $readonly ?>>
+        <input class="w3-input w3-border" id="<?= $class_qtde ?>" type="text" placeholder="Ex. 12" name="qntd[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->qntd ?>" <?= $readonly ?>>
       </div>
       <div class="w3-third">
         <label>Não faço esse serviço</label><br>
-        <input class="w3-check" id="<?= $class_check; ?>" data-whatever="<?= $pergunta->id_prof_pergunta; ?>" type="checkbox" name="faz_servico[<?php echo $pergunta->id_prof_pergunta; ?>]" <?php echo $faz_servico; ?>>
+        <input class="w3-check" id="<?= $class_check; ?>" data-whatever="<?= $pergunta->id_prof_pergunta; ?>" type="checkbox" name="faz_servico[<?= $pergunta->id_prof_pergunta; ?>]" <?= $faz_servico ?>>
       </div>
       <?php } else { ?>
       <div class="w3-third">
         <label>Primeiro</label>
-        <input class="w3-input w3-border" id="<?= $class_vp; ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_primeiro[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $vlr_primeiro; ?>" <?= $readonly ?>>
+        <input class="w3-input w3-border" id="<?= $class_vp ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_primeiro[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_primeiro; ?>" <?= $readonly ?>>
       </div>
       <div class="w3-third">
         <label>Quantidade</label>
-        <input class="w3-input w3-border" id="<?= $class_qtde; ?>" type="text" placeholder="Ex. 12" name="qntd[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $qntd; ?>" <?= $readonly ?>>
+        <input class="w3-input w3-border" id="<?= $class_qtde ?>" type="text" placeholder="Ex. 12" name="qntd[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->qntd; ?>" <?= $readonly ?>>
       </div>
       <div class="w3-third">
         <label>Valor Adicional</label>
-        <input class="w3-input w3-border" id="<?= $class_va; ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_adicional[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $vlr_adicional; ?>" <?= $readonly ?>>
+        <input class="w3-input w3-border" id="<?= $class_va ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_adicional[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_adicional ?>" <?= $readonly ?>>
       </div>
       <div class="w3-third">
         <label>Não faço esse serviço</label><br>
-        <input class="w3-check" id="<?= $class_check; ?>" data-whatever="<?= $pergunta->id_prof_pergunta; ?>" type="checkbox" name="faz_servico[<?php echo $pergunta->id_prof_pergunta; ?>]" <?php echo $faz_servico; ?>>
+        <input class="w3-check" id="<?= $class_check ?>" data-whatever="<?= $pergunta->id_prof_pergunta; ?>" type="checkbox" name="faz_servico[<?= $pergunta->id_prof_pergunta ?>]" <?= $faz_servico ?>>
       </div>
       <?php } ?>
     <?php } else { ?>
@@ -145,21 +109,21 @@ echo "<input type=\"hidden\" name=\"tipo[{$pergunta->tipo}]\" value=\"{$pergunta
       <?php if($pergunta->tem_vlr_primeiro == "S") { ?>
         <div class="w3-third">
           <label>Primeiro</label>
-          <input class="w3-input w3-border" id="<?= $class_vp; ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_primeiro[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $vlr_primeiro; ?>" <?= $readonly ?>>
+          <input class="w3-input w3-border" id="<?= $class_vp ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_primeiro[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_primeiro ?>" <?= $readonly ?>>
         </div>
       <?php } ?>
 
       <?php if($pergunta->tem_vlr_adicional == "S") { ?>
         <div class="w3-third">
           <label>Adicional</label>
-          <input class="w3-input w3-border" id="<?= $class_va; ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_adicional[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $vlr_adicional; ?>" <?= $readonly ?>>
+          <input class="w3-input w3-border" id="<?= $class_va ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_adicional[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_adicional ?>" <?= $readonly ?>>
         </div>
       <?php } ?>
 
       <?php if($pergunta->tem_faz_servico == "S") { ?>
         <div class="w3-third">
           <label>Não faço esse serviço</label><br>
-          <input class="w3-check" id="<?= $class_check; ?>" data-whatever="<?= $pergunta->id_prof_pergunta; ?>" type="checkbox" name="faz_servico[<?php echo $pergunta->id_prof_pergunta; ?>]" <?php echo $faz_servico; ?>>
+          <input class="w3-check" id="<?= $class_check ?>" data-whatever="<?= $pergunta->id_prof_pergunta; ?>" type="checkbox" name="faz_servico[<?= $pergunta->id_prof_pergunta ?>]" <?= $faz_servico ?>>
         </div>
       <?php } ?>
 
@@ -179,22 +143,22 @@ echo "<input type=\"hidden\" name=\"tipo[{$pergunta->tipo}]\" value=\"{$pergunta
       <?php if ($pergunta->tem_vlr_adicional == "S") { ?>
         <div class="form-check">
           <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" name="tipo_estimativa" <?php echo empty($vlr_adicional) ? "" : "checked"; ?> > Valor 
-            <input type="number" placeholder="Ex. R$ 100.00" id="vlr_adicional" name="vlr_adicional[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $vlr_adicional; ?>">
+            <input type="checkbox" class="form-check-input" name="tipo_estimativa" <?= empty($pergunta->vlr_adicional) ? "" : "checked" ?> > Valor 
+            <input type="number" placeholder="Ex. R$ 100.00" id="vlr_adicional" name="vlr_adicional[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_adicional ?>">
           </label>
         </div>    
       <?php } else if ($pergunta->tem_vlr_primeiro == "S") { ?>
         <div class="form-check">
           <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" name="tipo_estimativa" <?php echo empty($vlr_primeiro) ? "" : "checked"; ?> > Valor 
-            <input type="number" placeholder="Ex. R$ 100.00" id="vlr_primeiro" name="vlr_primeiro[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $vlr_primeiro; ?>">
+            <input type="checkbox" class="form-check-input" name="tipo_estimativa" <?= empty($pergunta->vlr_primeiro) ? "" : "checked" ?> > Valor 
+            <input type="number" placeholder="Ex. R$ 100.00" id="vlr_primeiro" name="vlr_primeiro[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_primeiro ?>">
           </label>
         </div>    
       <?php } else { ?>
         
         <div class="form-check">
           <label class="form-check-label">
-            <input type="radio" class="form-check-input cbx" name="checkbox[<?php echo $pergunta->id_prof_pergunta; ?>]" <?php echo $checkbox; ?>> <?php echo $pergunta->pergunta; ?>
+            <input type="radio" class="form-check-input cbx" name="checkbox[<?= $pergunta->id_prof_pergunta ?>]" <?= $checkbox ?>> <?= $pergunta->pergunta ?>
           </label>
         </div>
       <?php } ?>
@@ -204,21 +168,21 @@ echo "<input type=\"hidden\" name=\"tipo[{$pergunta->tipo}]\" value=\"{$pergunta
     <?php if ($pergunta->tem_vlr_primeiro == "S") { ?>
     <div class="w3-third">
       <!--<label>Adicional</label>-->
-      <input class="w3-input w3-border" type="text" placeholder="Ex. R$ 100.00" name="vlr_primeiro[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $vlr_primeiro; ?>">
+      <input class="w3-input w3-border" type="text" placeholder="Ex. R$ 100.00" name="vlr_primeiro[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_primeiro; ?>">
     </div>
     <?php } ?>
 
     <?php if ($pergunta->tem_vlr_adicional == "S") { ?>
     <div class="w3-third">
       <label>Adicionar</label>
-      <input class="w3-input w3-border" type="text" placeholder="Ex. R$ 100.00" name="vlr_adicional[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $vlr_adicional; ?>">
+      <input class="w3-input w3-border" type="text" placeholder="Ex. R$ 100.00" name="vlr_adicional[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_adicional; ?>">
     </div>
     <?php } ?>
 
     <?php if ($pergunta->tem_vlr_procent == "S") { ?>
     <div class="w3-third">
       <label>Acrescentar / Retirar</label>
-      <input class="w3-input w3-border" type="text" placeholder="Ex. 10%" name="vlr_porcent[<?php echo $pergunta->id_prof_pergunta; ?>]" value="<?php echo $vlr_porcent; ?>">
+      <input class="w3-input w3-border" type="text" placeholder="Ex. 10%" name="vlr_porcent[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_porcent ?>">
     </div>
     <?php } ?>
 
@@ -233,17 +197,15 @@ echo "<input type=\"hidden\" name=\"tipo[{$pergunta->tipo}]\" value=\"{$pergunta
 
 <br><br>
 <div class="w3-bar">
-  <?php if($possicao_array == 1) : ?> 
 	<a href="<?php echo base_url("restrita/prof/mensagem/aviso"); ?>" class="w3-button w3-red" rule="button">Voltar</a>
-  <?php else : ?>
-	<a href="<?php echo base_url("restrita/prof/pergunta/anterior/". ($possicao_array-1)); ?>" class="w3-button w3-red" rule="button">Voltar</a>
-  <?php endif; ?>
   <a href="<?php echo base_url("restrita/prof/mensagem/NaoFinalizado"); ?>" class="w3-button w3-black" rule="button">Terminar Mais Tarde</a>
   <button type="submit" class="w3-button w3-yellow">Próxima</button>
 </div>
 <br><br>
 
-<?= $this->pagination->create_links(); ?>
+<?= $pagination_enunciado ?>
+
+<?= $pagination_subcatego ?>
 
 </form>
 

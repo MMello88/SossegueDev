@@ -73,7 +73,7 @@ $route['restrita/prof/mensagem/aviso'] = 'precificacao/categoria_prestada/mensag
 $route['restrita/prof/mensagem/NaoFinalizado'] = 'precificacao/categoria_prestada/mensagemNaoTerminado';
 $route['restrita/prof/mensagem/finalizado'] = 'precificacao/categoria_prestada/mensagemTerminado';
 
-$route['restrita/prof/pergunta/(:any)/(:any)'] = 'precificacao/pergunta_prestador/pergunta/$1/$1';
+$route['restrita/prof/pergunta/(:any)/(:any)'] = 'precificacao/pergunta_prestador/pergunta/$1/$2';
 $route['restrita/prof/inicio'] = 'precificacao/pergunta_prestador/iniciar';
 $route['restrita/prof/resposta/gravar'] = 'precificacao/pergunta_prestador/gravar'; 
 

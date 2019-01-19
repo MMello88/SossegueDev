@@ -15,8 +15,8 @@ class Pergunta_Prestador extends MY_Restrita {
         
         $this->conf_pagination['base_url'] = base_url("restrita/prof/pergunta/");
         
-        $this->conf_pagination['full_tag_open'] = '<ul class="pagination"><li></li>';
-        $this->conf_pagination['full_tag_close'] = '<li></li></ul>';
+        $this->conf_pagination['full_tag_open'] = '<ul class="pagination"><li>';
+        $this->conf_pagination['full_tag_close'] = '</li><li></li></ul>';
         
         $this->conf_pagination['prev_tag_open'] = '<li>';
         $this->conf_pagination['prev_tag_close'] = '</li>';
@@ -38,31 +38,47 @@ class Pergunta_Prestador extends MY_Restrita {
     
     public function getPaginationSubCategoria($idSubcategoria){
         $id_profissional = $this->session->userdata('id_profissional');
-        $ProfSubCatgs = $this->ListaProf_subcategs->getProfSubcatByProfAndSubcatg($id_profissional);
-        
-        $this->conf_pagination['total_rows'] = count($ProfSubCatgs);
-        $this->conf_pagination['per_page'] = 1;
-        $this->conf_pagination['cur_page'] = $idSubcategoria;
-        $this->conf_pagination['num_links'] = count($ProfSubCatgs);
+        $ProfSubCatgs = $this->ListaProf_subcategs->getProfSubcategoria($id_profissional);
 
         extract($this->conf_pagination);
 
         $html = $full_tag_open;
         foreach ($ProfSubCatgs as $key => $subCatg) {
-            if($subCatg->id_subcategoria = $idSubcategoria)
-                $html .= cur_tag_open . $base_url . $subCatg->id_subcategoria . "/1" . cur_tag_close;
+            if($subCatg->id_subcategoria == $idSubcategoria)
+                $html .= $cur_tag_open . $subCatg->subcategoria . $cur_tag_close;
+            else
+                $html .= $num_tag_open . "<a href='" . $base_url ."/". $subCatg->id_subcategoria . "/1'>" . $subCatg->subcategoria . "</a>" . $num_tag_close;
         }
-        $html = $full_tag_close;
+        $html .= $full_tag_close;
 
-        return "";
+        return $html;
     }
 
-    public function getPaginationEnunciadoPerguntas($idEnunciado){
-        
+    public function getPaginationEnunciadoPerguntas($idSubcategoria, $ordem){
+        $Enunciados = $this->ListaProf_enunciado->getProf_enunciadoBySubcategoria($idSubcategoria);
+
+        extract($this->conf_pagination);
+
+        $html = $full_tag_open;
+        foreach ($Enunciados as $key => $enun) {
+            if($enun->ordem == $ordem)
+                $html .= $cur_tag_open . $enun->ordem . $cur_tag_close;
+            else
+                $html .= $num_tag_open . "<a href='" . $base_url ."/". $enun->id_subcategoria . "/". $enun->ordem ."'>" . $enun->ordem . "</a>" . $num_tag_close;
+        }
+        $html .= $full_tag_close;
+
+        return $html;
+
     }
 
-    public function pergunta($idSubcategoria, $idEnunciado){
+    public function pergunta($idSubcategoria, $ordem){
+        $this->data['pagination_enunciado'] = $this->getPaginationEnunciadoPerguntas($idSubcategoria, $ordem);
+        $this->data['pagination_subcatego'] = $this->getPaginationSubCategoria($idSubcategoria);
+        $this->data['ProfSubCatg'] = $this->getBuildPerguntasResposta($idSubcategoria, $ordem);
+        //$this->data['ProfSubCatg'] = $ProfSubCatg;
 
+        $this->layout->view('restrita/valor_mao_obra/pergunta', $this->data);
     }
 
 	public function iniciar(){
@@ -242,6 +258,24 @@ class Pergunta_Prestador extends MY_Restrita {
 		$this->layout->view('restrita/valor_mao_obra/pergunta', $this->data);
 	}
 	
+    private function getBuildPerguntasResposta($idSubcategoria, $ordem){
+        $id_profissional = $this->session->userdata('id_profissional');
+        $ProfSubCatg  = $this->ListaProf_subcategs->getProfSubcategoria($id_profissional, $idSubcategoria);
+        $SubCategoria = $this->ListaSubcategorias->get($ProfSubCatg->id_subcategoria);
+        $Enunciado    = $this->ListaProf_enunciado->getProf_enunciadoBySubcategoria($idSubcategoria, $ordem);
+        $Perguntas    = $this->ListaProf_perguntas->getPerguntaResposta($Enunciado->id_prof_enunciado, $id_profissional);
+
+        foreach($Perguntas as $key => $Pergunta){
+            $Perguntas[$key]->Resposta = null; // este for vai sumir, e vai ser um join ao buscar a pergunta
+        }
+
+        $Enunciado->Perguntas = $Perguntas;
+        $ProfSubCatg->Enunciado = $Enunciado;
+        $ProfSubCatg->SubCategoria = $SubCategoria;
+
+        return $ProfSubCatg;
+    }
+
 	private function MontaSubCategEnunciadoPerguntaResposta($id_subcategoria, $id_prof_enunciado, $ordem_enunciado){
 		$id_profissional = $this->session->userdata('id_profissional');
 		$ProfSubCatg = $this->ListaProf_subcategs->getProfSubcatByProfAndSubcatg($id_profissional, $id_subcategoria);

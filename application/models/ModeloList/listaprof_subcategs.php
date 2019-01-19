@@ -52,4 +52,24 @@ class ListaProf_subcategs extends Control {
 			return $rows[0];
 		}
 	}
+
+    public function getProfSubcategoria($id_profissional, $id_subcategoria = ''){
+        $sql = " SELECT p.id_prof_subcateg, p.id_profissional, p.id_subcategoria, s.subcategoria
+                  FROM tbl_prof_subcateg p
+                INNER JOIN tbl_subcategoria s ON (s.id_subcategoria = p.id_subcategoria)
+                 WHERE p.id_profissional = $id_profissional
+                   AND s.status = 'a'
+                   AND p.STATUS = 'a' ";
+
+        if (!empty($id_subcategoria)){
+            $sql .= " AND s.id_subcategoria = $id_subcategoria ";
+            $query = $this->_instance->db->query($sql);
+            return $query->result()[0];
+        } else {
+            $query = $this->_instance->db->query($sql);
+            return $query->result();
+        }
+        
+        
+    }
 }

@@ -16,4 +16,26 @@ class ListaProf_perguntas extends Control {
         $query = $this->_instance->db->get_where('prof_pergunta', array('id_prof_enunciado' => $id_prof_enunciado));
         return $query->custom_result_object('prof_pergunta');
     }
+
+    public function getPerguntaResposta($id_prof_enunciado, $id_profissional){
+    	$sql = "SELECT 
+				  e.id_prof_enunciado, p.id_prof_pergunta, r.id_prof_pergunta_resposta, p.ordem,
+				  e.titulo, p.pergunta, p.perg_ini, r.resp_perg_ini, p.sn_checkbox, r.checkbox, p.tem_faz_servico, r.faz_servico,
+				  p.tem_vlr_primeiro, r.vlr_primeiro, p.tem_vlr_adicional, r.vlr_adicional, p.tem_vlr_procent, r.vlr_porcent,
+				  p.tem_vlr_qntd, r.vlr_qntd, p.sn_vlr_sinal, r.vlr_sinal, p.sinal, r.sinal res_sinal, p.tipo
+				FROM 
+				  tbl_prof_pergunta p
+				LEFT JOIN
+				  tbl_prof_enunciado e ON (e.id_prof_enunciado = p.id_prof_enunciado)
+				LEFT JOIN
+				  tbl_prof_pergunta_resposta r ON (p.id_prof_pergunta = r.id_prof_pergunta)
+				LEFT JOIN 
+				  tbl_prof_subcateg s ON (s.id_prof_subcateg = r.id_prof_subcateg)  
+				WHERE 
+				  p.id_prof_enunciado = $id_prof_enunciado
+				or 
+				  s.id_profissional = $id_profissional";
+		$query = $this->_instance->db->query($sql);
+		return $query->result();
+    }
 }

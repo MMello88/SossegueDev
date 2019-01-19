@@ -41,7 +41,7 @@ class ListaProf_enunciado extends Control {
 				->db
 				->order_by('ordem','ASC')
 				->get_where('prof_enunciado', array('id_subcategoria' => $id_subcategoria, 'ordem' => $ordem));
-			$result = $query->custom_result_object(0,'prof_enunciado');
+			$result = $query->result();
 			return $result[0];
 		}
     }
