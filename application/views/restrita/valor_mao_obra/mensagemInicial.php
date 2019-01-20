@@ -18,7 +18,7 @@
 
 <div class="w3-bar">
   <a href="<?= base_url("restrita/lista/prestador/categorias"); ?>" class="w3-button w3-red">Voltar</a>
-  <a href="<?= base_url("restrita/prof/inicio"); ?>" class="w3-button w3-yellow">Continuar</a>
+  <a href="<?= base_url("restrita/prof/pergunta/") . "/$subcateg_inicial/1"; ?>" class="w3-button w3-yellow">Continuar</a>
 </div>
 
 

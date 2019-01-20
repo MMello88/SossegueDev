@@ -40,6 +40,8 @@ class Categoria_prestada extends MY_Restrita {
 	public function salvar() {
         $this->load->model('Modelo/prof_subcateg');
 		if($_POST){
+            list($id_prof_subcateg, $id_subcategoria, $count) = explode("/", $_POST['id_subcategoria'][0], 3);
+            $this->session->set_userdata('subcateg_inicial', $id_subcategoria);
 			$this->prof_subcateg->insert();
 			redirect('restrita/prof/mensagem/aviso');
 		} else {
@@ -48,20 +50,15 @@ class Categoria_prestada extends MY_Restrita {
     }
 	
     public function mensagemInicial(){
-        $this->session->set_userdata('arrConfigSubCateg', '');
-        $this->session->set_userdata('arrConfigEnunciado', '');
+        $this->data['subcateg_inicial'] = $this->session->userdata('subcateg_inicial');
         $this->layout->view('restrita/valor_mao_obra/mensagemInicial',$this->data);
     }
 	
 	public function mensagemNaoTerminado(){
-        $this->session->set_userdata('arrConfigSubCateg', '');
-        $this->session->set_userdata('arrConfigEnunciado', '');
         $this->layout->view('restrita/valor_mao_obra/mensagemNaoTerminado',$this->data);
     }
 	
 	public function mensagemTerminado(){
-        $this->session->set_userdata('arrConfigSubCateg', '');
-        $this->session->set_userdata('arrConfigEnunciado', '');
         $this->layout->view('restrita/valor_mao_obra/mensagemTerminado',$this->data);
     }
 }

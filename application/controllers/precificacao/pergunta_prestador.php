@@ -265,10 +265,6 @@ class Pergunta_Prestador extends MY_Restrita {
         $Enunciado    = $this->ListaProf_enunciado->getProf_enunciadoBySubcategoria($idSubcategoria, $ordem);
         $Perguntas    = $this->ListaProf_perguntas->getPerguntaResposta($Enunciado->id_prof_enunciado, $id_profissional);
 
-        foreach($Perguntas as $key => $Pergunta){
-            $Perguntas[$key]->Resposta = null; // este for vai sumir, e vai ser um join ao buscar a pergunta
-        }
-
         $Enunciado->Perguntas = $Perguntas;
         $ProfSubCatg->Enunciado = $Enunciado;
         $ProfSubCatg->SubCategoria = $SubCategoria;

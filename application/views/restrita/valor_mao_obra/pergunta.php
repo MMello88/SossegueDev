@@ -80,7 +80,7 @@
       </div>
       <div class="w3-third">
         <label>Quantidade</label>
-        <input class="w3-input w3-border" id="<?= $class_qtde ?>" type="text" placeholder="Ex. 12" name="qntd[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->qntd ?>" <?= $readonly ?>>
+        <input class="w3-input w3-border" id="<?= $class_qtde ?>" type="text" placeholder="Ex. 12" name="qntd[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_qntd ?>" <?= $readonly ?>>
       </div>
       <div class="w3-third">
         <label>Não faço esse serviço</label><br>
@@ -93,7 +93,7 @@
       </div>
       <div class="w3-third">
         <label>Quantidade</label>
-        <input class="w3-input w3-border" id="<?= $class_qtde ?>" type="text" placeholder="Ex. 12" name="qntd[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->qntd; ?>" <?= $readonly ?>>
+        <input class="w3-input w3-border" id="<?= $class_qtde ?>" type="text" placeholder="Ex. 12" name="qntd[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_qntd; ?>" <?= $readonly ?>>
       </div>
       <div class="w3-third">
         <label>Valor Adicional</label>
