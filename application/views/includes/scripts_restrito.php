@@ -14,6 +14,17 @@ $('#btnVoltarPergunta').on('click', function(){
 <?php }
 } ?>
 
+<script>
+
+$('button#btnPost').on('click', function(ev){
+	ev.preventDefault()
+	action = $("form#formsubcatgPergunta").attr("action");
+	action = action.concat("/"+$(this).attr("value"));
+	$("form#formsubcatgPergunta").attr("action", action);
+	$("form#formsubcatgPergunta").submit();
+});
+</script>
+
 <?php 
 /*não uso mais descartar depois, tudo daqui para baixo*/
 

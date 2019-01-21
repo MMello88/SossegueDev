@@ -82,7 +82,10 @@ class Pergunta_Prestador extends MY_Restrita {
     }
 
     public function pergunta($idSubcategoria, $ordem){
-        if($_POST) print_r($_POST);
+        if($_POST) {
+            print_r($_POST);
+            $ordem = (!empty($_POST['btnNext'])) ? ($_POST['btnNext']) : ((!empty($_POST['btnPrev'])) ? ($_POST['btnPrev']) : ((!empty($_POST['btnCurr'])) ? ($_POST['btnCurr']) : ($ordem)));
+        }
         $this->data['idSubcategoria'] = $idSubcategoria;
         $this->data['ordem'] = $ordem;
         $this->data['pagination_enunciado'] = $this->getPaginationEnunciadoPerguntas($idSubcategoria, $ordem);
