@@ -61,8 +61,17 @@ class Pergunta_Prestador extends MY_Restrita {
 
         $html = $full_tag_open;
         foreach ($Enunciados as $key => $enun) {
-            if($enun->ordem == $ordem)
+            if($enun->ordem == $ordem){
+                $this->data['cur_ordem' ] = $enun->ordem;
+        
+                if (isset($Enunciados[$key-1]))
+                    $this->data['prev_ordem'] = $Enunciados[$key-1]->ordem;
+                
+                if (isset($Enunciados[$key+1]))
+                    $this->data['next_ordem'] = $Enunciados[$key+1]->ordem;
+                
                 $html .= $cur_tag_open . $enun->ordem . $cur_tag_close;
+            }
             else
                 $html .= $num_tag_open . "<a href='" . $base_url ."/". $enun->id_subcategoria . "/". $enun->ordem ."'>" . $enun->ordem . "</a>" . $num_tag_close;
         }
@@ -73,6 +82,9 @@ class Pergunta_Prestador extends MY_Restrita {
     }
 
     public function pergunta($idSubcategoria, $ordem){
+        if($_POST) print_r($_POST);
+        $this->data['idSubcategoria'] = $idSubcategoria;
+        $this->data['ordem'] = $ordem;
         $this->data['pagination_enunciado'] = $this->getPaginationEnunciadoPerguntas($idSubcategoria, $ordem);
         $this->data['pagination_subcatego'] = $this->getPaginationSubCategoria($idSubcategoria);
         $this->data['ProfSubCatg'] = $this->getBuildPerguntasResposta($idSubcategoria, $ordem);

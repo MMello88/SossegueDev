@@ -37,7 +37,7 @@
 </div>
 <?php } ?>
 
-<?php echo  form_open("restrita/prof/resposta/gravar", array("id" => "formsubcatgPergunta")); ?>
+<?php echo  form_open("restrita/prof/pergunta/$idSubcategoria/$ordem", array("id" => "formsubcatgPergunta")); ?>
 <input type="hidden" name="id_prof_subcateg" value="<?php echo $ProfSubCatg->id_prof_subcateg; ?>">
 <input type="hidden" name="id_prof_enunciado" value="<?php echo $ProfSubCatg->Enunciado->id_prof_enunciado; ?>">
 <input type="hidden" name="id_subcategoria" value="<?php echo $ProfSubCatg->Enunciado->id_subcategoria; ?>">
@@ -197,9 +197,19 @@
 
 <br><br>
 <div class="w3-bar">
-	<a href="<?php echo base_url("restrita/prof/mensagem/aviso"); ?>" class="w3-button w3-red" rule="button">Voltar</a>
-  <a href="<?php echo base_url("restrita/prof/mensagem/NaoFinalizado"); ?>" class="w3-button w3-black" rule="button">Terminar Mais Tarde</a>
-  <button type="submit" class="w3-button w3-yellow">Próxima</button>
+  <?php if(isset($prev_ordem)) : ?>    
+    <button type="submit" name="btnPrev" value="<?= $prev_ordem ?>" class="w3-button w3-red">Anterior</button>
+  <?php else: ?>
+    <a href="<?php echo base_url("restrita/prof/mensagem/aviso"); ?>" class="w3-button w3-red" rule="button">Aviso Inicial</a>
+  <?php endif; ?>
+
+  <?php if(isset($cur_ordem)) : ?>
+    <button type="submit" name="btnCur" value="<?= $cur_ordem ?>" class="w3-button w3-black">Terminar Mais Tarde</button>
+  <?php endif; ?>
+
+  <?php if(isset($next_ordem)) : ?>
+    <button type="submit" name="btnNext" value="<?= $next_ordem ?>" class="w3-button w3-yellow">Próxima</button>
+  <?php endif; ?>
 </div>
 <br><br>
 
