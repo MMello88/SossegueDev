@@ -84,7 +84,9 @@ class Pergunta_Prestador extends MY_Restrita {
     public function pergunta($idSubcategoria, $ordem){
         if($_POST) {
             print_r($_POST);
-            $ordem = (!empty($_POST['btnNext'])) ? ($_POST['btnNext']) : ((!empty($_POST['btnPrev'])) ? ($_POST['btnPrev']) : ((!empty($_POST['btnCurr'])) ? ($_POST['btnCurr']) : ($ordem)));
+        }
+        if (!empty($_POST['btnCur'])){
+            redirect("restrita/prof/mensagem/NaoFinalizado");
         }
         $this->data['idSubcategoria'] = $idSubcategoria;
         $this->data['ordem'] = $ordem;

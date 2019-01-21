@@ -17,10 +17,17 @@ $('#btnVoltarPergunta').on('click', function(){
 <script>
 
 $('button#btnPost').on('click', function(ev){
-	ev.preventDefault()
+	ev.preventDefault();
+	$('<input>').attr({
+	    type: 'hidden',
+	    value: $(this).attr("name"),
+	    name: $(this).attr("name")
+	}).appendTo('form#formsubcatgPergunta');
+
 	action = $("form#formsubcatgPergunta").attr("action");
 	action = action.concat("/"+$(this).attr("value"));
 	$("form#formsubcatgPergunta").attr("action", action);
+	
 	$("form#formsubcatgPergunta").submit();
 });
 </script>

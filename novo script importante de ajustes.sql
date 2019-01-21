@@ -101,3 +101,16 @@ ALTER TABLE `sosse694_teste`.`tbl_prof_pergunta_resposta_pedido`
   DROP COLUMN `sn_vlr_sinal_off`, 
   DROP COLUMN `valor_sinal_off`, 
   DROP COLUMN `tipo`;
+
+
+ALTER TABLE `sosse694_teste`.`tbl_prof_pergunta_resposta`   
+  DROP COLUMN `resp_perg_ini`;
+
+ALTER TABLE `sosse694_teste`.`tbl_prof_pergunta`   
+  DROP COLUMN `perg_ini`;
+
+ALTER TABLE `sosse694_teste`.`tbl_prof_pergunta`   
+  DROP COLUMN `sinal`;
+
+ALTER TABLE `sosse694_teste`.`tbl_prof_pergunta_resposta`   
+  ADD COLUMN `tipo` VARCHAR(100) NULL AFTER `vlr_sinal`;
