@@ -84,6 +84,31 @@ class Pergunta_Prestador extends MY_Restrita {
     public function pergunta($idSubcategoria, $ordem){
         if($_POST) {
             print_r($_POST);
+            $this->load->model('Modelo/Prof_pergunta_resposta');
+            foreach ($this->input->post('id_prof_pergunta') as $id_pergunta) {
+                $resposta = array(
+                    'id_prof_pergunta' => $this->input->post('id_prof_pergunta')[$id_pergunta],
+                    'id_prof_subcateg' => $this->input->post('id_prof_subcateg'),
+                    'vlr_primeiro'     => !empty($this->input->post('vlr_primeiro')[$id_pergunta]) ? $this->input->post('vlr_primeiro')[$id_pergunta] : "",
+                    'vlr_adicional'    => !empty($this->input->post('vlr_adicional')[$id_pergunta]) ? $this->input->post('vlr_adicional')[$id_pergunta] : "",
+                    'vlr_porcent'      => !empty($this->input->post('vlr_porcent')[$id_pergunta]) ? $this->input->post('vlr_porcent')[$id_pergunta] : "",
+                    'vlr_qntd'         => !empty($this->input->post('vlr_qntd')[$id_pergunta]) ? $this->input->post('vlr_qntd')[$id_pergunta] : "",
+                    'vlr_faz_servico'  => !empty($this->input->post('vlr_faz_servico')[$id_pergunta]) ? $this->input->post('vlr_faz_servico')[$id_pergunta] : "",
+                    'vlr_sinal'        => !empty($this->input->post('vlr_sinal')[$id_pergunta]) ? $this->input->post('vlr_sinal')[$id_pergunta] : "",
+                    'vlr_tipo'         => !empty($this->input->post('vlr_tipo')[0]) ? $this->input->post('vlr_tipo')[0] : "",
+                    'vlr_checkbox'     => !empty($this->input->post('vlr_checkbox')[$id_pergunta]) ? $this->input->post('vlr_checkbox')[$id_pergunta] : ""
+                );
+                
+                if(!empty($_POST['id_prof_pergunta_resposta'][$id_pergunta])){
+                    $condicao = array(
+                        'id_prof_pergunta_resposta' => $this->input->post('id_prof_pergunta_resposta'),  
+                    );
+                    $this->Prof_pergunta_resposta->update($resposta, $condicao);
+                } else {
+                    $resposta['id_prof_pergunta_resposta'] = null;
+                    $this->Prof_pergunta_resposta->insert($resposta);
+                }
+            }
         }
         if (!empty($_POST['btnCur'])){
             redirect("restrita/prof/mensagem/NaoFinalizado");

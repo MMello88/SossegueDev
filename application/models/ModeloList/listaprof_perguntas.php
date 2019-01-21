@@ -20,9 +20,9 @@ class ListaProf_perguntas extends Control {
     public function getPerguntaResposta($id_prof_enunciado, $id_profissional){
     	$sql = "SELECT 
 				  e.id_prof_enunciado, p.id_prof_pergunta, r.id_prof_pergunta_resposta, p.ordem,
-				  e.titulo, p.pergunta, p.perg_ini, r.resp_perg_ini, p.sn_checkbox, r.checkbox, p.tem_faz_servico, r.faz_servico,
+				  e.titulo, p.pergunta, p.sn_checkbox, r.vlr_checkbox, p.tem_faz_servico, r.vlr_faz_servico,
 				  p.tem_vlr_primeiro, r.vlr_primeiro, p.tem_vlr_adicional, r.vlr_adicional, p.tem_vlr_procent, r.vlr_porcent,
-				  p.tem_vlr_qntd, r.vlr_qntd, p.sn_vlr_sinal, r.vlr_sinal, p.sinal, r.sinal res_sinal, p.tipo
+				  p.tem_vlr_qntd, r.vlr_qntd, p.sn_vlr_sinal, r.vlr_sinal, p.tipo
 				FROM 
 				  tbl_prof_pergunta p
 				LEFT JOIN
