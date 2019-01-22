@@ -42,9 +42,7 @@
 <br>
 <?php 
 	foreach ($ProfSubCatg->Enunciado->Perguntas as $key => $pergunta) { 
-    $vlr_checkbox    = empty($pergunta->sn_checkbox)    ? "" : $pergunta->sn_checkbox    == "S" ? "checked"  : "";
-    $vlr_faz_servico = empty($pergunta->faz_servico) ? "" : $pergunta->faz_servico == "S" ? "checked"  : "";
-    $readonly    = empty($pergunta->faz_servico) ? "" : $pergunta->faz_servico == "S" ? "readonly" : ""; 
+    $readonly    = empty($pergunta->tem_faz_servico) ? "" : $pergunta->vlr_faz_servico == "checked" ? "readonly" : ""; 
 
     $class_check = "c".$pergunta->id_prof_pergunta;
     $class_vp    = "vp".$pergunta->id_prof_pergunta;
@@ -90,7 +88,7 @@
   <?php if ($pergunta->sn_checkbox == "S") { ?>
     <div class="form-check">
       <label class="form-check-label">
-        <input type="radio" class="form-check-input cbx" name="vlr_checkbox[<?= $pergunta->id_prof_pergunta ?>]" <?= $vlr_checkbox ?>> <?= $pergunta->pergunta ?>
+        <input type="radio" class="form-check-input cbx" name="vlr_checkbox[<?= $pergunta->id_prof_pergunta ?>]" <?= $pergunta->vlr_checkbox ?>> <?= $pergunta->pergunta ?>
       </label>
     </div>
   <?php } ?>
@@ -105,7 +103,7 @@
   <?php if($pergunta->tem_faz_servico == "S") { ?>
     <div class="w3-third">
       <label>Não faço esse serviço</label><br>
-      <input class="w3-check" id="<?= $class_check ?>" data-whatever="<?= $pergunta->id_prof_pergunta; ?>" type="checkbox" name="vlr_faz_servico[<?= $pergunta->id_prof_pergunta ?>]" <?= $vlr_faz_servico ?>>
+      <input class="w3-check" id="<?= $class_check ?>" data-whatever="<?= $pergunta->id_prof_pergunta; ?>" type="checkbox" name="vlr_faz_servico[<?= $pergunta->id_prof_pergunta ?>]" <?= $pergunta->vlr_faz_servico ?>>
     </div>
   <?php } ?> 
 

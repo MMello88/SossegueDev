@@ -87,7 +87,7 @@ class Pergunta_Prestador extends MY_Restrita {
             $this->load->model('Modelo/Prof_pergunta_resposta');
             foreach ($this->input->post('id_prof_pergunta') as $id_pergunta) {
                 $resposta = array(
-                    'id_prof_pergunta' => $this->input->post('id_prof_pergunta')[$id_pergunta],
+                    'id_prof_pergunta' => $id_pergunta,
                     'id_prof_subcateg' => $this->input->post('id_prof_subcateg'),
                     'vlr_primeiro'     => !empty($this->input->post('vlr_primeiro')[$id_pergunta]) ? $this->input->post('vlr_primeiro')[$id_pergunta] : "",
                     'vlr_adicional'    => !empty($this->input->post('vlr_adicional')[$id_pergunta]) ? $this->input->post('vlr_adicional')[$id_pergunta] : "",
@@ -101,7 +101,7 @@ class Pergunta_Prestador extends MY_Restrita {
                 
                 if(!empty($_POST['id_prof_pergunta_resposta'][$id_pergunta])){
                     $condicao = array(
-                        'id_prof_pergunta_resposta' => $this->input->post('id_prof_pergunta_resposta'),  
+                        'id_prof_pergunta_resposta' => $this->input->post('id_prof_pergunta_resposta')[$id_pergunta],  
                     );
                     $this->Prof_pergunta_resposta->update($resposta, $condicao);
                 } else {

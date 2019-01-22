@@ -122,3 +122,12 @@ ALTER TABLE `sosse694_teste`.`tbl_prof_pergunta_resposta`
   CHANGE `faz_servico` `vlr_faz_servico` CHAR(1) CHARSET utf8 COLLATE utf8_general_ci NULL,
   CHANGE `tipo` `vlr_tipo` VARCHAR(100) CHARSET utf8 COLLATE utf8_general_ci NULL,
   CHANGE `checkbox` `vlr_checkbox` CHAR(1) CHARSET utf8 COLLATE utf8_general_ci NULL;
+
+
+ALTER TABLE `sosse694_teste`.`tbl_prof_pergunta_resposta`   
+  CHANGE `vlr_checkbox` `vlr_checkbox` CHAR(2) CHARSET utf8 COLLATE utf8_general_ci NULL;
+
+
+ALTER TABLE `sosse694_teste`.`tbl_prof_pergunta_resposta`   
+  CHANGE `vlr_faz_servico` `vlr_faz_servico` CHAR(2) CHARSET utf8 COLLATE utf8_general_ci NULL,
+  CHANGE `vlr_sinal` `vlr_sinal` CHAR(2) CHARSET utf8 COLLATE utf8_general_ci NULL;
