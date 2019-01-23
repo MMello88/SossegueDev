@@ -158,7 +158,7 @@
                                         echo 'vlr_primeiro: ' . $valueInicial->vlr_primeiro. '<br/>';
                                         echo 'vlr_adicional: ' . $valueInicial->vlr_adicional. '<br/>';
                                         echo 'vlr_porcent: ' . $valueInicial->vlr_porcent. '<br/>';
-                                        echo 'qntd: ' . $valueInicial->qntd. '<br/>';
+                                        echo 'qntd: ' . $valueInicial->vlr_qntd. '<br/>';
 
 
                                         /*<input type='hidden' name='id_profissional[$prof_subcateg->id_subcategoria][$prof->id_profissional][]' value='$prof->id_profissional'>
@@ -196,17 +196,17 @@
                                         echo 'vlr_primeiro: ' . $valueResposta->vlr_primeiro. '<br/>';
                                         echo 'vlr_adicional: ' . $valueResposta->vlr_adicional. '<br/>';
                                         echo 'vlr_porcent: ' . $valueResposta->vlr_porcent. '<br/>';
-                                        echo 'qntd: ' . $valueResposta->qntd. '<br/>';
+                                        echo 'qntd: ' . $valueResposta->vlr_qntd. '<br/>';
                                         echo 'key: ' . $key;
                                         
 
                                         if ($key === 0){
-                                            if ($valueResposta->qntd === 0 && $valueResposta->Pedido->qntd === 1) {
+                                            if ($valueResposta->vlr_qntd === 0 && $valueResposta->Pedido->qntd === 1) {
                                                 $sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_primeiro;
                                             } else {
                                                 $sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_primeiro;
-                                                if ($valueResposta->Pedido->qntd > $valueResposta->qntd && $valueResposta->Pedido->qntd > 1)
-                                                    $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->Pedido->qntd-$valueResposta->qntd-1));
+                                                if ($valueResposta->Pedido->qntd > $valueResposta->vlr_qntd && $valueResposta->Pedido->qntd > 1)
+                                                    $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->Pedido->qntd-$valueResposta->vlr_qntd-1));
                                             }
                                         } else {
                                             $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->Pedido->qntd));
@@ -292,14 +292,14 @@
                     <div class="col-xs-12 col-md-6">
                         <div class="row">
                             <div class="col-xs-5 col-md-3">
-                                <img src="<?php echo base_url('assets/media/categoria_servico/'.$pedido->Servico->categoria->imagem); ?>" class="img-responsive" alt="Rack" height="100" width="100" align="left">
+                                <img src="<?php echo base_url('assets/media/categoria_servico/'.$pedido->imagem); ?>" class="img-responsive" alt="Rack" height="100" width="100" align="left">
                             </div>
                             <div class="col-xs-7 col-md-9">
                                 <ul class="list-unstyled">
-                                    <li><strong><?php echo $pedido->Servico->categoria->descricao; ?></strong></li>
-                                    <li>Categoria <?php echo $pedido->Servico->categoria->subcategoria->descricao; ?></li>
+                                    <li><strong><?php echo $pedido->descricao; ?></strong></li>
+                                    <li>Categoria <?php echo $pedido->descricao; ?></li>
                                     <li>Id Servico <?php echo $pedido->id_servico; ?></li>
-                                    <li>Servico de <?php echo $pedido->Servico->descricao; ?></li>
+                                    <li>Servico de <?php echo $pedido->descricao; ?></li>
                                     <?php foreach($pedido->filtros as $key => $filtro) { ?> <!-- forecah -->
                                     <?php if (!empty($filtro->filtro)) { ?>
                                         <input type="hidden" name="perg_descr[<?= $prof->id_profissional; ?>]" value="<?= $filtro->pergunta; ?>">

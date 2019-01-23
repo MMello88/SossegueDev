@@ -69,36 +69,7 @@ class Carrinho extends MY_Front {
 
             $this->superModel->update('pedido', $data, $condicoes);
         }
-    }
-    
-    /*old function*/
-    /*public function Finalizar($idOrcamento){
-        //update no pedido passando orçamento e finalizando todos os pedidos
-        $data = array(
-            'status' => 'f'
-        );
-
-        $condicao = array(
-            array(
-                'campo' => 'id_orcamento',
-                'valor' => $idOrcamento
-            ),
-            array (
-                'sinal' => '<>',
-                'campo' => 'status',
-                'valor' => 'e'
-            )
-        );
-
-        $this->superModel->update('pedido', $data, $condicao);
-
-        //$this->enviaEmailPedido($this->data);
-        
-        $this->layout->view('confirmacao-pedido', $this->data);
-
-        $this->session->unset_userdata('url');
-        $this->session->unset_userdata('id_orcamento');
-    }*/
+    }    
 
     public function Finalizar(){
         //update no pedido passando orçamento e finalizando todos os pedidos
@@ -252,23 +223,8 @@ class Carrinho extends MY_Front {
                 {
                     foreach ($prof->prof_subcategs as $keyProfSubCateg => $valueProfsubCateg) 
                     {
-                        if (array_search($prof->id_profissional, $arrayProf) === FALSE){
-                            array_push($arrayProf, $prof->id_profissional);
-                            $sql_resposta_inicial = "SELECT pr.*, p.tipo tipo
-                                                      FROM tbl_prof_pergunta_resposta pr 
-                                                      LEFT JOIN tbl_prof_pergunta p ON (pr.id_prof_pergunta = p.id_prof_pergunta)
-                                                      LEFT JOIN tbl_prof_enunciado e ON (e.id_prof_enunciado = p.id_prof_enunciado)
-                                                     WHERE pr.id_prof_subcateg = $valueProfsubCateg->id_prof_subcateg
-                                                       AND p.tipo IN ('valor_minimo_visita')
-                                                       AND e.id_subcategoria = $valueProfsubCateg->id_subcategoria ";
-                            $valores_inicials = $this->superModel->query( $sql_resposta_inicial );
-                            foreach ($valores_inicials as $valueInicial) {
-                                if (!isset($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_iniciais)){
-                                    $mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_iniciais = array();
-                                }
-                                array_push($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_iniciais, $valueInicial);
-                            }
-                        }
+                        if (array_search($prof->id_profissional, $arrayProf) === FALSE)
+                            array_push($arrayProf, $prof->id_profissional);                        
 						
                         $in_filtro = "";
                         foreach($valuePedido->filtros as $keyFiltro => $filtro){
@@ -278,16 +234,19 @@ class Carrinho extends MY_Front {
                             $in_filtro .= ",'$filtro->id_filtro'";
                         }
 
-                        $sql_resposta_profs = "  SELECT pr.*, '' tipo
+                        $sql_resposta_profs = "  SELECT pr.*, p.tipo, e.id_prof_enunciado
                                                   FROM tbl_prof_pergunta_resposta pr 
                                                   LEFT JOIN tbl_prof_pergunta_filtro pf ON (pr.id_prof_pergunta = pf.id_prof_pergunta)
+                                                 INNER JOIN tbl_prof_pergunta p ON (pr.id_prof_pergunta = p.id_prof_pergunta)
+                                                 INNER JOIN tbl_prof_enunciado e ON (e.id_prof_enunciado = p.id_prof_enunciado)
                                                  WHERE pr.id_prof_subcateg = $valueProfsubCateg->id_prof_subcateg
                                                    AND pf.id_categoria_servico = $valuePedido->id_categoria_servico
-                                                   AND pf.id_servico = $valuePedido->id_servico";
+                                                   AND pf.id_servico = $valuePedido->id_servico
+                                                   AND e.id_subcategoria = $valueProfsubCateg->id_subcategoria";
                         if (!empty($in_filtro))
-                          $sql_resposta_profs .= " AND pf.id_filtro in ($in_filtro) ";
-                        $sql_resposta_profs .= "   AND (pf.tipo is null or pf.tipo = 'o')
-                                                   ORDER BY pr.vlr_primeiro DESC";
+                          $sql_resposta_profs .= " AND pf.id_filtro in ($in_filtro) 
+                                                   AND (pf.tipo is null or pf.tipo = 'o') ";
+                          $sql_resposta_profs .= " ORDER BY pr.vlr_primeiro DESC";
                         $respostas = $this->superModel->query( $sql_resposta_profs );
                         foreach ($respostas as $valueResposta) {
                             if (!isset($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->respostas)){
@@ -297,167 +256,12 @@ class Carrinho extends MY_Front {
                             array_push($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->respostas, $valueResposta);
                         }
                         
-                        $sql_config_valres = " SELECT pr.* 
-                                                 FROM tbl_prof_pergunta_resposta pr
-                                                 LEFT JOIN tbl_prof_pergunta_filtro pf ON (pr.id_prof_pergunta = pf.id_prof_pergunta)
-                                                WHERE pr.id_prof_subcateg = $valueProfsubCateg->id_prof_subcateg
-                                                  AND pr.faz_servico <> 'S'
-                                                  AND pf.id_categoria_servico = $valuePedido->id_categoria_servico
-                                                  AND pf.id_servico = $valuePedido->id_servico ";
-												if (!empty($in_filtro))
-                          $sql_config_valres .= " AND pf.id_filtro in ($in_filtro) ";
-                          $sql_config_valres .= " AND pf.tipo IN ('c','v')
-                                                  AND (pr.vlr_porcent <> 0 OR pr.checkbox = 'S')";
-                        $valores_config = $this->superModel->query( $sql_config_valres );
-                        foreach ($valores_config as $valueValor_Config) {
-                            if (!isset($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_config)){
-                                $mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_config = array();
-                            }
-                            array_push($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_config, $valueValor_Config);
-                        }
                     }
                 }
             }
             
         }
-        //depois do mix formado, tenho q colocar os valores por orçamento
-        /*foreach ($mixs as $mix) 
-        {
-            foreach ($mix->profs as $keyProf => $prof) 
-            {
-                //echo $keyProf;
-                $mix->profs[$keyProf]->valor_visita = '';
-                $mix->profs[$keyProf]->valor_instalacao = '';
-                $mix->profs[$keyProf]->valor_primeiro = '';
-                $mix->profs[$keyProf]->valor_add = '';
-                $this->EhPreenchimentoManual = '';
-                foreach ($prof->prof_subcategs as $keyProfSubcateg => $prof_subcateg) 
-                {
-                    $mix->profs[$keyProf]->prof_subcategs[$keyProfSubcateg]->valor_primeiro = '';
-                    $mix->profs[$keyProf]->prof_subcategs[$keyProfSubcateg]->valor_add = '';
-                    $mix->profs[$keyProf]->prof_subcategs[$keyProfSubcateg]->pedidos = array();
-                    $data = array (
-                        'select' => '*',
-                        'condicoes' => array (
-                            array (
-                                'campo' => 'id_prof_subcateg',
-                                'valor' => $prof_subcateg->id_prof_subcateg
-                            ) 
-                        )
-                    );
-
-                    $pergunta_respostas = $this->superModel->select ( 'prof_pergunta_resposta', $data );
-
-                    // for somente para buscar os valores iniciais
-                    foreach ($pergunta_respostas as $pergunta_resposta) 
-                    {
-                        $data = array (
-                            'select' => '*',
-                            'condicoes' => array (
-                                array (
-                                    'campo' => 'id_prof_pergunta',
-                                    'valor' => $pergunta_resposta->id_prof_pergunta
-                                ) 
-                            )
-                        );
-
-                        $prof_pergunta = $this->superModel->select ( 'prof_pergunta', $data )[0];
-
-                        if ($prof_pergunta->perg_ini == "S")
-                        {
-                            if ($this->EhPreenchimentoManual === '')
-                            {
-                                //busca por valor preenchido pelo prestador 
-                                if ($prof_pergunta->perg_ini == "S" and 
-                                    $prof_pergunta->sn_checkbox == "S" and 
-                                    $prof_pergunta->tem_vlr_primeiro == "N" and
-                                    $prof_pergunta->tem_vlr_adicional == "N" and
-                                    $prof_pergunta->tem_vlr_procent == "N" and
-                                    $prof_pergunta->tem_vlr_qntd == "N" and
-                                    $prof_pergunta->tem_faz_servico == "N" and
-                                    $prof_pergunta->sinal == "" and
-                                    $pergunta_resposta->checkbox == "S"){
-                                        $this->EhPreenchimentoManual = True;
-                                        //echo $prof->id_profissional;
-                                        //print_r($prof_pergunta->pergunta);
-                                        //echo "<br/>";
-                                } else if ($prof_pergunta->perg_ini == "S" and 
-                                    $prof_pergunta->sn_checkbox == "S" and 
-                                    $prof_pergunta->tem_vlr_primeiro == "N" and
-                                    $prof_pergunta->tem_vlr_adicional == "N" and
-                                    $prof_pergunta->tem_vlr_procent == "N" and
-                                    $prof_pergunta->tem_vlr_qntd == "N" and
-                                    $prof_pergunta->tem_faz_servico == "N" and
-                                    $prof_pergunta->sinal == "" and
-
-                                    $pergunta_resposta->checkbox == "S"){
-                                        $this->EhPreenchimentoManual = False;
-                                        //echo $prof->id_profissional;
-                                        //print_r($prof_pergunta->pergunta);
-                                        //echo "<br/>";
-                                }
-                            }
-
-                            if ($this->EhPreenchimentoManual === True)
-                            {
-                                if ($prof_pergunta->perg_ini == "S" and 
-                                    $prof_pergunta->sn_checkbox == "N" and 
-                                    $prof_pergunta->tem_vlr_primeiro == "S" and
-                                    $prof_pergunta->tem_vlr_adicional == "N" and
-                                    $prof_pergunta->tem_vlr_procent == "N" and
-                                    $prof_pergunta->tem_vlr_qntd == "N" and
-                                    $prof_pergunta->tem_faz_servico == "N" and
-                                    $prof_pergunta->sinal == "" and
-                                    $pergunta_resposta->checkbox == ""){
-                                        //echo $prof->nome;
-                                        $mix->profs[$keyProf]->valor_visita = $pergunta_resposta->vlr_primeiro;
-                                        //echo "VALOR DA VISITA:" . $pergunta_resposta->vlr_primeiro;
-                                        //echo "<br/>";
-                                }
-
-                                if ($prof_pergunta->perg_ini == "S" and 
-                                    $prof_pergunta->sn_checkbox == "S" and 
-                                    $prof_pergunta->tem_vlr_primeiro == "N" and
-                                    $prof_pergunta->tem_vlr_adicional == "N" and
-                                    $prof_pergunta->tem_vlr_procent == "N" and
-                                    $prof_pergunta->tem_vlr_qntd == "N" and
-                                    $prof_pergunta->tem_faz_servico == "N" and
-                                    $prof_pergunta->sinal == "" and
-                                    $pergunta_resposta->checkbox == ""){
-                                       $mix->profs[$keyProf]->valor_instalacao = '';
-                                        //$this->TemValorVisita = True;
-                                        //echo "<br/>";
-                                        //echo $prof_subcateg->id_profissional;
-                                        //echo "estima presencial";
-                                        //print_r($prof_pergunta->id_prof_pergunta);
-                                        //print_r($prof_pergunta->pergunta);
-                                        //echo "<br/>";
-                                } else if ($prof_pergunta->perg_ini == "S" and 
-                                            $prof_pergunta->sn_checkbox == "S" and 
-                                            $prof_pergunta->tem_vlr_primeiro == "S" and
-                                            $prof_pergunta->tem_vlr_adicional == "N" and
-                                            $prof_pergunta->tem_vlr_procent == "N" and
-                                            $prof_pergunta->tem_vlr_qntd == "N" and
-                                            $prof_pergunta->tem_faz_servico == "N" and
-                                            $prof_pergunta->sinal == "" and
-
-                                            $pergunta_resposta->checkbox == ""){
-                                               $mix->profs[$keyProf]->valor_instalacao = $pergunta_resposta->vlr_primeiro;
-                                               //$this->TemValorVisita = True;
-                                               // echo "<br/>";
-                                               // echo $prof_subcateg->id_profissional;
-                                               // echo "VALOR DA instalação:" . $pergunta_resposta->vlr_primeiro;
-                                               // print_r($prof_pergunta->id_prof_pergunta);
-                                               // print_r($prof_pergunta->pergunta);
-                                               // echo "<br/>";
-                                }
-                            }
-                        }
-                    }  
-                }  
-            }
-        }*/
-
+       
             
         foreach ($mixs as $mix) { 
             foreach ($mix->profs as $keyProf => $prof) {
@@ -470,14 +274,32 @@ class Carrinho extends MY_Front {
 
     private function getPedidosPorServico($id_orcamento, $id_subcategoria){
         $pedidos = $this->superModel->query(
-            "select pd.id_pedido, pd.id_servico, sv.id_categoria_servico, pd.id_orcamento, pd.qntd, pd.status, cs.id_subcategoria
-               from tbl_pedido pd 
-               left join tbl_servico sv on (pd.id_servico = sv.id_servico)
-               left join tbl_categoria_servico cs on (cs.id_categoria_servico = sv.id_categoria_servico)
-              where pd.id_orcamento = {$id_orcamento}
-                and cs.id_subcategoria = {$id_subcategoria}
-                and pd.status <> 'e'
-              group by pd.id_pedido, pd.id_servico, pd.id_orcamento, pd.qntd, pd.status, cs.id_subcategoria");
+            "SELECT 
+              pd.id_pedido,
+              pd.id_servico,
+              sv.descricao servico,
+              sv.id_categoria_servico,
+              cs.descricao,
+              cs.imagem,
+              pd.id_orcamento,
+              pd.qntd,
+              pd.status,
+              cs.id_subcategoria,
+              s.subcategoria 
+            FROM
+              tbl_pedido pd 
+              LEFT JOIN tbl_servico sv ON (pd.id_servico = sv.id_servico) 
+              LEFT JOIN tbl_categoria_servico cs ON (cs.id_categoria_servico = sv.id_categoria_servico) 
+              LEFT JOIN tbl_subcategoria s ON (s.id_subcategoria = cs.id_subcategoria AND s.status = 'a') 
+            WHERE pd.id_orcamento = $id_orcamento
+              AND cs.id_subcategoria = $id_subcategoria
+              AND pd.status <> 'e' 
+            GROUP BY pd.id_pedido,
+              pd.id_servico,
+              pd.id_orcamento,
+              pd.qntd,
+              pd.status,
+              cs.id_subcategoria");
 
         foreach ($pedidos as $key => $pedido){
             $sql = "SELECT c.descricao AS pergunta, c.id_pergunta, b.descricao AS filtro, a.valor, a.id_filtro "
@@ -488,515 +310,11 @@ class Carrinho extends MY_Front {
             $filtro = $this->superModel->query( $sql );
 
             $pedidos[$key]->filtros = $filtro;
-
-            $data = array (
-                'select' => 'id_categoria_servico, descricao',
-                'condicoes' => array (
-                    array (
-                        'campo' => 'id_servico',
-                        'valor' => $pedido->id_servico
-                    )
-                )
-            );
-
-            $servico = $this->superModel->select( 'servico', $data );
-            $servico = $servico[0];
-
-            $pedidos[$key]->Servico = $servico;
-
-            $data = array (
-                'select' => 'id_categoria_servico, id_subcategoria, descricao, imagem',
-                'condicoes' => array (
-                    array (
-                        'campo' => 'id_categoria_servico',
-                        'valor' => $servico->id_categoria_servico
-                    ) 
-                )
-            );
-
-            $categoria_servico = $this->superModel->select ( 'categoria_servico', $data );
-            $categoria_servico = $categoria_servico[0];
-
-            $pedidos[$key]->Servico->categoria = $categoria_servico;
-
-            $data = array (
-                'select' => 'subcategoria as descricao',
-                'condicoes' => array (
-                    array (
-                        'campo' => 'id_subcategoria',
-                        'valor' => $categoria_servico->id_subcategoria
-                    ) 
-                )
-            );
-
-            $subcategoria = $this->superModel->select ( 'subcategoria', $data );
-            $subcategoria = $subcategoria[0];
-
-            $pedidos[$key]->Servico->categoria->subcategoria = $subcategoria;
         }
 
         return $pedidos;
     }
 
-/*
-    private function getPedidos_bkp_bkp(){
-        $mix = array();
-
-        $data = array (
-            'select' => 'id_pedido, id_orcamento, id_servico, qntd',
-            'condicoes' => array (
-                array (
-                    'campo' => 'id_orcamento',
-                    'valor' => $this->id_orcamento
-                ),
-                array (
-                    'sinal' => '<>',
-                    'campo' => 'status',
-                    'valor' => 'e'
-                )
-            ) 
-        );
-
-        $pedidos = $this->superModel->select ( 'pedido', $data );
-
-        $total_pedido = 0;
-        foreach ($pedidos as $key => $pedido){   
-            $total_pedido++;
-
-            $sql = "SELECT c.descricao AS pergunta, b.descricao AS filtro, a.valor "
-                 . " FROM tbl_pedido_filtro a "
-                 . " LEFT JOIN tbl_filtro b ON (b.id_filtro = a.id_filtro) "
-                 . " LEFT JOIN tbl_pergunta c ON (c.id_pergunta = b.id_pergunta) "
-                 . " WHERE a.id_pedido = $pedido->id_pedido";
-            $filtro = $this->superModel->query( $sql );
-
-            $pedidos[$key]->filtros = $filtro;
-
-            $data = array (
-                'select' => 'id_categoria_servico, descricao',
-                'condicoes' => array (
-                    array (
-                        'campo' => 'id_servico',
-                        'valor' => $pedido->id_servico
-                    )
-                )
-            );
-
-            $servico = $this->superModel->select( 'servico', $data );
-            $servico = $servico[0];
-
-            $pedidos[$key]->Servico = $servico;
-
-            $data = array (
-                'select' => 'id_categoria_servico, id_subcategoria, descricao, imagem',
-                'condicoes' => array (
-                    array (
-                        'campo' => 'id_categoria_servico',
-                        'valor' => $servico->id_categoria_servico
-                    ) 
-                )
-            );
-
-            $categoria_servico = $this->superModel->select ( 'categoria_servico', $data );
-            $categoria_servico = $categoria_servico[0];
-
-            $pedidos[$key]->Servico->categoria = $categoria_servico;
-
-            $data = array (
-                'select' => 'subcategoria as descricao',
-                'condicoes' => array (
-                    array (
-                        'campo' => 'id_subcategoria',
-                        'valor' => $categoria_servico->id_subcategoria
-                    ) 
-                )
-            );
-
-            $subcategoria = $this->superModel->select ( 'subcategoria', $data );
-            $subcategoria = $subcategoria[0];
-
-            $pedidos[$key]->Servico->categoria->subcategoria = $subcategoria;
-        }
-
-        $sql = "SELECT s.id_profissional, s.id_prof_subcateg, pd.id_orcamento, u.nome
-                  FROM tbl_prof_subcateg s
-                  LEFT JOIN tbl_profissional p ON (p.id_profissional = s.id_profissional)
-                  LEFT JOIN tbl_usuario u ON (u.id_usuario = p.id_usuario)
-                  LEFT JOIN tbl_categoria_servico cs ON (cs.id_subcategoria = s.id_subcategoria)
-                  LEFT JOIN tbl_servico sv ON (sv.id_categoria_servico = cs.id_categoria_servico)
-                  LEFT JOIN tbl_pedido pd ON (pd.id_servico = sv.id_servico)
-                 WHERE s.status = 'a'
-                   AND u.status = 'a'
-                   AND pd.id_orcamento = {$this->id_orcamento} 
-                GROUP BY s.id_profissional, s.id_prof_subcateg, pd.id_orcamento, u.nome " ;
-
-
-        
-        $profs = $this->superModel->query( $sql );
-
-        $mixs[0] = new stdClass;
-        $mixs[0]->pedidos = $pedidos;
-        $mixs[0]->profs = $profs;
-
-        $mixs[1] = new stdClass;
-        $mixs[1]->pedidos = $pedidos;
-        $mixs[1]->profs = $profs;
-
-        $mixs[2] = new stdClass;
-        $mixs[2]->pedidos = $pedidos;
-        $mixs[2]->profs = $profs;
-
-        
-        foreach ($mixs as $mix) { 
-            foreach ($mix->profs as $key => $prof_subcateg) {
-                $mix->profs[$key]->valor_visita = '';
-                $mix->profs[$key]->valor_instalacao = '';
-                $this->EhPreenchimentoManual = '';
-                //tbl_prof_pergunta_resposta
-                $data = array (
-                    'select' => '*',
-                    'condicoes' => array (
-                        array (
-                            'campo' => 'id_prof_subcateg',
-                            'valor' => $prof_subcateg->id_prof_subcateg
-                        ) 
-                    )
-                );
-
-                $pergunta_respostas = $this->superModel->select ( 'prof_pergunta_resposta', $data );
-
-                //die();
-                // for somente para buscar os valores iniciais
-                foreach ($pergunta_respostas as $pergunta_resposta) {
-                    $data = array (
-                        'select' => '*',
-                        'condicoes' => array (
-                            array (
-                                'campo' => 'id_prof_pergunta',
-                                'valor' => $pergunta_resposta->id_prof_pergunta
-                            ) 
-                        )
-                    );
-
-                    $prof_pergunta = $this->superModel->select ( 'prof_pergunta', $data )[0];
-
-                    if ($this->EhPreenchimentoManual === '')
-                    {
-                        
-                        if ($prof_pergunta->perg_ini == "S" and 
-                            $prof_pergunta->sn_checkbox == "S" and 
-                            $prof_pergunta->tem_vlr_primeiro == "N" and
-                            $prof_pergunta->tem_vlr_adicional == "N" and
-                            $prof_pergunta->tem_vlr_procent == "N" and
-                            $prof_pergunta->tem_vlr_qntd == "N" and
-                            $prof_pergunta->tem_faz_servico == "N" and
-                            $prof_pergunta->sinal == "" and
-                            $pergunta_resposta->checkbox == "S"){
-                                $this->EhPreenchimentoManual = True;
-                                echo $prof_subcateg->id_profissional;
-                                print_r($prof_pergunta->pergunta);
-                                echo "<br/>";
-                        } else if ($prof_pergunta->perg_ini == "S" and 
-                            $prof_pergunta->sn_checkbox == "S" and 
-                            $prof_pergunta->tem_vlr_primeiro == "N" and
-                            $prof_pergunta->tem_vlr_adicional == "N" and
-                            $prof_pergunta->tem_vlr_procent == "N" and
-                            $prof_pergunta->tem_vlr_qntd == "N" and
-                            $prof_pergunta->tem_faz_servico == "N" and
-                            $prof_pergunta->sinal == "" and
-                            $pergunta_resposta->checkbox == "S"){
-                                $this->EhPreenchimentoManual = False;
-                                echo $prof_subcateg->id_profissional;
-                                print_r($prof_pergunta->pergunta);
-                                echo "<br/>";
-                        }
-                    }
-
-
-                    if ($this->EhPreenchimentoManual === True)
-                    {
-                        
-                        if ($prof_pergunta->perg_ini == "S" and 
-                            $prof_pergunta->sn_checkbox == "N" and 
-                            $prof_pergunta->tem_vlr_primeiro == "S" and
-                            $prof_pergunta->tem_vlr_adicional == "N" and
-                            $prof_pergunta->tem_vlr_procent == "N" and
-                            $prof_pergunta->tem_vlr_qntd == "N" and
-                            $prof_pergunta->tem_faz_servico == "N" and
-                            $prof_pergunta->sinal == "" and
-                            $pergunta_resposta->checkbox == ""){
-                               $mix->profs[$key]->valor_visita = $pergunta_resposta->vlr_primeiro;
-                                echo "VALOR DA VISITA:" . $pergunta_resposta->vlr_primeiro;
-                                echo "<br/>";
-                        }
-
-                        if ($prof_pergunta->perg_ini == "S" and 
-                            $prof_pergunta->sn_checkbox == "S" and 
-                            $prof_pergunta->tem_vlr_primeiro == "N" and
-                            $prof_pergunta->tem_vlr_adicional == "N" and
-                            $prof_pergunta->tem_vlr_procent == "N" and
-                            $prof_pergunta->tem_vlr_qntd == "N" and
-                            $prof_pergunta->tem_faz_servico == "N" and
-                            $prof_pergunta->sinal == "" and
-                            $pergunta_resposta->checkbox == ""){
-                               $mix->profs[$key]->valor_instalacao = '';
-                                //$this->TemValorVisita = True;
-                                echo "<br/>";
-                                echo $prof_subcateg->id_profissional;
-                                echo "estima presencial";
-                                print_r($prof_pergunta->id_prof_pergunta);
-                                print_r($prof_pergunta->pergunta);
-                                echo "<br/>";
-                        } else if ($prof_pergunta->perg_ini == "S" and 
-                                    $prof_pergunta->sn_checkbox == "S" and 
-                                    $prof_pergunta->tem_vlr_primeiro == "S" and
-                                    $prof_pergunta->tem_vlr_adicional == "N" and
-                                    $prof_pergunta->tem_vlr_procent == "N" and
-                                    $prof_pergunta->tem_vlr_qntd == "N" and
-                                    $prof_pergunta->tem_faz_servico == "N" and
-                                    $prof_pergunta->sinal == "" and
-                                    $pergunta_resposta->checkbox == ""){
-                                       $mix->profs[$key]->valor_instalacao = $pergunta_resposta->vlr_primeiro;
-                                        //$this->TemValorVisita = True;
-                                        echo "<br/>";
-                                        echo $prof_subcateg->id_profissional;
-                                        echo "VALOR DA instalação:" . $pergunta_resposta->vlr_primeiro;
-                                        print_r($prof_pergunta->id_prof_pergunta);
-                                        print_r($prof_pergunta->pergunta);
-                                        echo "<br/>";
-                        }
-
-                    }
-                }    
-            }
-        }
-
-        return $mixs;
-    }
-
-    private function getPedidos(){
-        $mix = array();
-        $data = array (
-            'select' => 'id_subcategoria, subcategoria',
-            'condicoes' => array (
-                array (
-                    'campo' => 'status',
-                    'valor' => 'a'
-                )
-            ) 
-        );
-
-        $tbl_subcategoria = $this->superModel->select ( 'subcategoria', $data );
-        //echo count($tbl_subcategoria);
-        foreach ($tbl_subcategoria as $key_item => $item_subcategoria)
-        {
-
-            $data = array (
-                'select' => 'pedido.id_pedido, pedido.id_orcamento, pedido.id_servico, pedido.qntd',
-                'join' => array(
-                    array(
-                        'tabela' => 'servico',
-                        'on' => 'servico.id_servico = pedido.id_servico'
-                    ),
-                    array(
-                        'tabela' => 'categoria_servico',
-                        'on' => 'categoria_servico.id_categoria_servico = servico.id_categoria_servico'
-                    )
-                ),
-                'condicoes' => array (
-                    array (
-                        'campo' => 'pedido.id_orcamento',
-                        'valor' => $this->id_orcamento
-                    ),
-                    array (
-                        'campo' => 'categoria_servico.id_subcategoria',
-                        'valor' => $item_subcategoria->id_subcategoria
-                    ),
-                    array (
-                        'sinal' => '<>',
-                        'campo' => 'pedido.status',
-                        'valor' => 'e'
-                    )
-                ) 
-            );
-
-            $pedidos = $this->superModel->select ( 'pedido', $data );
-            
-            foreach ($pedidos as $key => $pedido){
-                $sql = "SELECT c.descricao AS pergunta, b.descricao AS filtro, a.valor "
-                     . " FROM tbl_pedido_filtro a "
-                     . " LEFT JOIN tbl_filtro b ON (b.id_filtro = a.id_filtro) "
-                     . " LEFT JOIN tbl_pergunta c ON (c.id_pergunta = b.id_pergunta) "
-                     . " WHERE a.id_pedido = $pedido->id_pedido";
-                $filtro = $this->superModel->query( $sql );
-
-                $pedidos[$key]->filtros = $filtro;
-
-                $data = array (
-                    'select' => 'id_categoria_servico, descricao',
-                    'condicoes' => array (
-                        array (
-                            'campo' => 'id_servico',
-                            'valor' => $pedido->id_servico
-                        )
-                    )
-                );
-
-                $servico = $this->superModel->select( 'servico', $data );
-                $servico = $servico[0];
-
-                $pedidos[$key]->Servico = $servico;
-
-                $data = array (
-                    'select' => 'id_categoria_servico, id_subcategoria, descricao, imagem',
-                    'condicoes' => array (
-                        array (
-                            'campo' => 'id_categoria_servico',
-                            'valor' => $servico->id_categoria_servico
-                        ) 
-                    )
-                );
-
-                $categoria_servico = $this->superModel->select ( 'categoria_servico', $data );
-                $categoria_servico = $categoria_servico[0];
-
-                $pedidos[$key]->Servico->categoria = $categoria_servico;
-
-
-
-
-                $data = array (
-                    'select' => 'profissional.id_profissional, usuario.nome',
-                    'join' => array(
-                        array(
-                            'tabela' => 'profissional',
-                            'on' => 'profissional.id_profissional = prof_subcateg.id_profissional'
-                        ),
-                        array(
-                            'tabela' => 'usuario',
-                            'on' => 'usuario.id_usuario = profissional.id_usuario'
-                        )
-                    ),
-                    'condicoes' => array (
-                        array (
-                            'campo' => 'prof_subcateg.id_subcategoria',
-                            'valor' => $item_subcategoria->id_subcategoria,
-                        ),
-                        array (
-                            'campo' => 'prof_subcateg.status',
-                            'valor' => 'a'
-                        ),
-                        array (
-                            'campo' => 'usuario.status',
-                            'valor' => 'a'
-                        )
-                    ),
-                    'limit' => array(
-                        'page' => '0',
-                        'qtde' => '3'
-                    )
-                );
-
-                $prof_subcateg = $this->superModel->select ('prof_subcateg', $data );
-                $prof_subcateg = $prof_subcateg;
-
-                $pedidos[$key]->Servico->categoria->profissionais = $prof_subcateg;
-
-
-
-                $data = array (
-                    'select' => 'subcategoria as descricao',
-                    'condicoes' => array (
-                        array (
-                            'campo' => 'id_subcategoria',
-                            'valor' => $categoria_servico->id_subcategoria
-                        ) 
-                    )
-                );
-
-                
-                $subcategoria = $subcategoria[0];
-
-                $pedidos[$key]->Servico->categoria->subcategoria = $subcategoria;
-
-
-
-                $mix[$key_item] = $pedidos;
-            }
-        }
-
-
-        return $mix;
-    }
-
-    private function getProfPergunta($id_prof_pergunta){
-        $data = array (
-            'select' => '*',
-            'condicoes' => array (
-                array (
-                    'campo' => 'id_prof_pergunta',
-                    'valor' => $id_prof_pergunta
-                )
-            )
-        );
-
-        return $this->superModel->select ('prof_pergunta', $data);
-    }
-
-    private function getProfPerguntaFiltros($id_categoria_servico, $id_servico){
-        $data = array (
-            'select' => 'id_prof_pergunta_filtro, id_prof_pergunta, ds_filtro, id_filtro, id_categoria_servico, id_servico',
-            'condicoes' => array (
-                array (
-                    'campo' => 'id_categoria_servico',
-                    'valor' => $id_categoria_servico
-                ),
-                array (
-                    'campo' => 'id_servico',
-                    'valor' => $id_servico
-                )
-            )
-        );
-
-        return $this->superModel->select ('prof_pergunta_filtro', $data);
-    }
-
-    private function getProfPerguntaResposta($id_prof_subcateg, $id_prof_pergunta){
-        $data = array (
-            'select' => '*',
-            'condicoes' => array (
-                array (
-                    'campo' => 'id_prof_subcateg',
-                    'valor' => $id_prof_subcateg
-                ),
-                array (
-                    'campo' => 'id_prof_pergunta',
-                    'valor' => $id_prof_pergunta
-                )
-            )
-        );
-
-        return $this->superModel->select ('prof_pergunta_resposta', $data);
-    }
-
-    private function getProfSubcateg($id_profissional){
-        $data = array (
-            'select' => 'id_prof_subcateg, id_subcategoria, id_profissional, status',
-            'condicoes' => array (
-                array (
-                    'campo' => 'id_profissional',
-                    'valor' => $id_profissional
-                ),
-                array (
-                    'campo' => 'status',
-                    'valor' => 'a'
-                )
-            ) 
-        );
-
-        return $this->superModel->select ('prof_subcateg', $data);
-    }
-*/
 
     private function MontaValor($id_profissional){
         $profSubcategs = $this->getProfSubcateg($id_profissional);
@@ -1266,4 +584,47 @@ class Carrinho extends MY_Front {
         //Close and output PDF document
         $pdf->Output('example_006.pdf', 'I');
     }*/
+
+
+
+    /*
+
+
+                            $sql_resposta_inicial = "SELECT pr.*, p.tipo, e.id_prof_enunciado
+                                                      FROM tbl_prof_pergunta_resposta pr 
+                                                      LEFT JOIN tbl_prof_pergunta p ON (pr.id_prof_pergunta = p.id_prof_pergunta)
+                                                      LEFT JOIN tbl_prof_enunciado e ON (e.id_prof_enunciado = p.id_prof_enunciado)
+                                                     WHERE pr.id_prof_subcateg = $valueProfsubCateg->id_prof_subcateg
+                                                       AND p.tipo IN ('valor_minimo_visita')
+                                                       AND e.id_subcategoria = $valueProfsubCateg->id_subcategoria ";
+                            $valores_inicials = $this->superModel->query( $sql_resposta_inicial );
+                            foreach ($valores_inicials as $valueInicial) {
+                                if (!isset($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_iniciais)){
+                                    $mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_iniciais = array();
+                                }
+                                array_push($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_iniciais, $valueInicial);
+                            }
+                        }
+
+
+$sql_config_valres = " SELECT pr.* 
+                                                 FROM tbl_prof_pergunta_resposta pr
+                                                 LEFT JOIN tbl_prof_pergunta_filtro pf ON (pr.id_prof_pergunta = pf.id_prof_pergunta)
+                                                WHERE pr.id_prof_subcateg = $valueProfsubCateg->id_prof_subcateg
+                                                  --AND pr.faz_servico <> 'S'
+                                                  AND pf.id_categoria_servico = $valuePedido->id_categoria_servico
+                                                  AND pf.id_servico = $valuePedido->id_servico ";
+                                                if (!empty($in_filtro))
+                          $sql_config_valres .= " AND pf.id_filtro in ($in_filtro) ";
+                          $sql_config_valres .= " AND pf.tipo IN ('c','v')
+                                                  AND (pr.vlr_porcent <> 0 --OR pr.checkbox = 'S')";
+                        $valores_config = $this->superModel->query( $sql_config_valres );
+                        foreach ($valores_config as $valueValor_Config) {
+                            if (!isset($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_config)){
+                                $mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_config = array();
+                            }
+                            array_push($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->valores_config, $valueValor_Config);
+                        }
+
+    */
 }
