@@ -118,7 +118,7 @@ class Carrinho extends MY_Front {
         $mixs = array();
 
         $profissionals = $this->superModel->query(
-            "SELECT a.id_profissional, a.nome, (a.total_vezes - a.vezes) status_ordem 
+            "SELECT a.id_profissional, a.nome, (a.total_vezes - a.vezes) status_ordem, $this->id_orcamento id_orcamento
                FROM (
                 SELECT 
                   s.id_profissional, u.nome, COUNT(*) vezes, 
@@ -167,16 +167,12 @@ class Carrinho extends MY_Front {
 
         foreach ($mixs as $keyMix => $mix) 
         {
-            $arrayProf = array('');
             foreach ($mix->pedidos as $keyPedido => $valuePedido) 
             {   
                 foreach ($mix->profs as $keyProf => $prof) 
                 {
                     foreach ($prof->prof_subcategs as $keyProfSubCateg => $valueProfsubCateg) 
-                    {
-                        if (array_search($prof->id_profissional, $arrayProf) === FALSE)
-                            array_push($arrayProf, $prof->id_profissional);                        
-                        
+                    {                       
                         $in_filtro = "";
                         foreach($valuePedido->filtros as $keyFiltro => $filtro){
                           if($keyFiltro == 0)
@@ -198,6 +194,8 @@ class Carrinho extends MY_Front {
                           $sql_resposta_profs .= " AND pf.id_filtro in ($in_filtro) 
                                                    AND (pf.tipo is null or pf.tipo = 'o') ";
                           $sql_resposta_profs .= " ORDER BY pr.vlr_primeiro DESC";
+
+
                         $respostas = $this->superModel->query( $sql_resposta_profs );
                         foreach ($respostas as $valueResposta) {
                             if (!isset($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->respostas)){

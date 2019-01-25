@@ -131,3 +131,35 @@ ALTER TABLE `sosse694_teste`.`tbl_prof_pergunta_resposta`
 ALTER TABLE `sosse694_teste`.`tbl_prof_pergunta_resposta`   
   CHANGE `vlr_faz_servico` `vlr_faz_servico` CHAR(2) CHARSET utf8 COLLATE utf8_general_ci NULL,
   CHANGE `vlr_sinal` `vlr_sinal` CHAR(2) CHARSET utf8 COLLATE utf8_general_ci NULL;
+
+
+/*
+
+
+
+
+SELECT * FROM tbl_orcamento WHERE id_orcamento = 1036;
+SELECT * FROM tbl_pedido WHERE id_orcamento = 1036;
+SELECT * FROM tbl_pedido_filtro WHERE id_pedido IN (704,705,706);
+SELECT * FROM tbl_prof_subcateg s WHERE s.id_profissional = 278 AND s.STATUS = 'a';
+SELECT * FROM tbl_prof_pergunta_resposta WHERE id_prof_subcateg = 20;
+SELECT * FROM tbl_prof_pergunta_filtro WHERE (id_servico, id_subcategoria, id_categoria_servico) IN (SELECT id_servico, id_subcategoria, id_categoria_servico FROM tbl_pedido WHERE id_orcamento = 1036)
+
+
+
+SELECT r.* 
+  FROM tbl_prof_subcateg s
+  LEFT JOIN tbl_pedido p ON (p.id_orcamento = 1036 AND p.id_subcategoria = s.id_subcategoria)
+  LEFT JOIN tbl_prof_pergunta_resposta r ON (r.id_prof_subcateg = s.id_prof_subcateg)
+  LEFT JOIN tbl_prof_pergunta_filtro f ON (f.id_prof_pergunta = r.id_prof_pergunta AND 
+					f.id_subcategoria = p.id_subcategoria AND
+					f.id_servico = p.id_servico AND
+					f.id_categoria_servico = p.id_categoria_servico)
+ WHERE s.id_profissional = 278 
+   AND s.status = 'a'
+   AND p.id_orcamento = 1036
+   
+   
+   
+ 
+*/
