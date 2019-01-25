@@ -117,11 +117,120 @@ class Carrinho extends MY_Front {
         $tem_pedido_sem_profissinal = '';
         $mixs = array();
 
+        $profissionals = $this->superModel->query(
+            "SELECT a.id_profissional, a.nome, (a.total_vezes - a.vezes) status_ordem 
+               FROM (
+                SELECT 
+                  s.id_profissional, u.nome, COUNT(*) vezes, 
+                  (SELECT COUNT(*) FROM ( SELECT p.id_subcategoria FROM tbl_pedido p WHERE p.id_orcamento = $this->id_orcamento  AND p.status = 'a' GROUP BY p.id_subcategoria) a) total_vezes
+                FROM
+                  tbl_prof_subcateg s 
+                LEFT JOIN tbl_profissional p ON (p.id_profissional = s.id_profissional)
+                LEFT JOIN tbl_usuario u ON (u.id_usuario = p.id_usuario)
+                WHERE s.id_subcategoria IN (SELECT pd.id_subcategoria FROM tbl_pedido pd WHERE pd.id_orcamento = $this->id_orcamento GROUP BY pd.id_subcategoria) 
+                  AND s.status = 'a'
+                GROUP BY s.id_profissional, u.nome ) a
+                ORDER BY 3");
+
+        $status_ordem = -1;
+        $key = -1;
+        foreach ($profissionals as $profissional) {
+            
+            if ($profissional->status_ordem <> $status_ordem){
+                $key += 1;
+
+                $sql = "SELECT * FROM tbl_prof_subcateg s WHERE s.STATUS = 'a' AND s.id_profissional = $profissional->id_profissional";
+                $prof_subcategs = $this->superModel->query( $sql );
+                $arrSubcategs = array();
+                foreach ($prof_subcategs as $key => $value) {
+                    $arrSubcategs[] = $value->id_subcategoria;
+                }
+
+                $status_ordem = $profissional->status_ordem;
+                $pedidos = $this->getPedidosPorServico($this->id_orcamento, $arrSubcategs);
+                $mix = new stdClass;
+                $mix->pedidos = $pedidos;
+                $mix->profs = array();
+                $profissional->prof_subcategs = $prof_subcategs;
+                array_push($mix->profs, $profissional);
+                $mixs[$key] = $mix;
+            } else if ($profissional->status_ordem == $status_ordem) {
+                $sql = "SELECT * FROM tbl_prof_subcateg s WHERE s.STATUS = 'a' AND s.id_profissional = $profissional->id_profissional";
+                $prof_subcategs = $this->superModel->query( $sql );
+                $profissional->prof_subcategs = $prof_subcategs;
+                array_push($mixs[$key]->profs, $profissional);
+            }
+            
+        }
+
+        
+
+        foreach ($mixs as $keyMix => $mix) 
+        {
+            $arrayProf = array('');
+            foreach ($mix->pedidos as $keyPedido => $valuePedido) 
+            {   
+                foreach ($mix->profs as $keyProf => $prof) 
+                {
+                    foreach ($prof->prof_subcategs as $keyProfSubCateg => $valueProfsubCateg) 
+                    {
+                        if (array_search($prof->id_profissional, $arrayProf) === FALSE)
+                            array_push($arrayProf, $prof->id_profissional);                        
+                        
+                        $in_filtro = "";
+                        foreach($valuePedido->filtros as $keyFiltro => $filtro){
+                          if($keyFiltro == 0)
+                            $in_filtro .= "'$filtro->id_filtro'";
+                          else
+                            $in_filtro .= ",'$filtro->id_filtro'";
+                        }
+
+                        $sql_resposta_profs = "  SELECT pr.*, p.tipo, e.id_prof_enunciado
+                                                  FROM tbl_prof_pergunta_resposta pr 
+                                                  LEFT JOIN tbl_prof_pergunta_filtro pf ON (pr.id_prof_pergunta = pf.id_prof_pergunta)
+                                                 INNER JOIN tbl_prof_pergunta p ON (pr.id_prof_pergunta = p.id_prof_pergunta)
+                                                 INNER JOIN tbl_prof_enunciado e ON (e.id_prof_enunciado = p.id_prof_enunciado)
+                                                 WHERE pr.id_prof_subcateg = $valueProfsubCateg->id_prof_subcateg
+                                                   AND pf.id_categoria_servico = $valuePedido->id_categoria_servico
+                                                   AND pf.id_servico = $valuePedido->id_servico
+                                                   AND e.id_subcategoria = $valueProfsubCateg->id_subcategoria";
+                        if (!empty($in_filtro))
+                          $sql_resposta_profs .= " AND pf.id_filtro in ($in_filtro) 
+                                                   AND (pf.tipo is null or pf.tipo = 'o') ";
+                          $sql_resposta_profs .= " ORDER BY pr.vlr_primeiro DESC";
+                        $respostas = $this->superModel->query( $sql_resposta_profs );
+                        foreach ($respostas as $valueResposta) {
+                            if (!isset($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->respostas)){
+                                $mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->respostas = array();
+                            }
+                            $valueResposta->Pedido = $valuePedido;
+                            array_push($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->respostas, $valueResposta);
+                        }
+                        
+                    }
+                }
+            }
+            
+        }
+       
+            
+        foreach ($mixs as $mix) { 
+            foreach ($mix->profs as $keyProf => $prof) {
+                //print_r($mix->profs);
+            }
+        }
+
+        return $mixs;
+    }
+
+    private function getPedidos(){
+      echo $this->id_orcamento;
+        $tem_pedido_sem_profissinal = '';
+        $mixs = array();
+
         $subcategorias = $this->superModel->query(" SELECT sb.id_subcategoria, sb.id_categoria, sb.subcategoria, sb.titulo, sb.status
                                                       FROM tbl_pedido p 
-                                                      LEFT JOIN tbl_servico s ON (s.id_servico = p.id_servico)
-                                                      LEFT JOIN tbl_categoria_servico c ON (c.id_categoria_servico = s.id_categoria_servico)
-                                                      LEFT JOIN tbl_subcategoria sb ON (sb.id_subcategoria = c.id_subcategoria)
+                                                      LEFT JOIN tbl_subcategoria sb ON (sb.id_subcategoria = p.id_subcategoria)
                                                      WHERE p.id_orcamento = {$this->id_orcamento}
                                                        AND sb.status = 'a'
                                                        GROUP BY sb.id_subcategoria, sb.id_categoria, sb.subcategoria, sb.titulo, sb.status");
@@ -273,33 +382,36 @@ class Carrinho extends MY_Front {
     }
 
     private function getPedidosPorServico($id_orcamento, $id_subcategoria){
+        if (is_array($id_subcategoria)){
+            $subs = "";
+            foreach ($id_subcategoria as $key => $value) {
+                if (count($id_subcategoria)-1 == $key)
+                    $subs .= "$value";
+                else
+                    $subs .= "$value,";
+            }
+        } else if (is_string($id_subcategoria)) $subs = $id_subcategoria;
+
         $pedidos = $this->superModel->query(
             "SELECT 
-              pd.id_pedido,
-              pd.id_servico,
-              sv.descricao servico,
-              sv.id_categoria_servico,
-              cs.descricao,
-              cs.imagem,
-              pd.id_orcamento,
-              pd.qntd,
-              pd.status,
-              cs.id_subcategoria,
+              p.id_pedido,
+              p.id_servico,
+              v.descricao servico,
+              v.id_categoria_servico,
+              c.descricao,
+              c.imagem,
+              p.id_orcamento,
+              p.qntd,
+              p.status,
+              c.id_subcategoria,
               s.subcategoria 
-            FROM
-              tbl_pedido pd 
-              LEFT JOIN tbl_servico sv ON (pd.id_servico = sv.id_servico) 
-              LEFT JOIN tbl_categoria_servico cs ON (cs.id_categoria_servico = sv.id_categoria_servico) 
-              LEFT JOIN tbl_subcategoria s ON (s.id_subcategoria = cs.id_subcategoria AND s.status = 'a') 
-            WHERE pd.id_orcamento = $id_orcamento
-              AND cs.id_subcategoria = $id_subcategoria
-              AND pd.status <> 'e' 
-            GROUP BY pd.id_pedido,
-              pd.id_servico,
-              pd.id_orcamento,
-              pd.qntd,
-              pd.status,
-              cs.id_subcategoria");
+            FROM tbl_pedido p 
+            LEFT JOIN tbl_subcategoria s ON (s.id_subcategoria = p.id_subcategoria)
+            LEFT JOIN tbl_categoria_servico c ON (c.id_categoria_servico = p.id_categoria_servico AND c.id_subcategoria = p.id_subcategoria)
+            LEFT JOIN tbl_servico v ON (v.id_servico = p.id_servico AND v.id_categoria_servico = p.id_categoria_servico)
+            WHERE p.id_orcamento = $id_orcamento 
+              AND p.status <> 'e' 
+              AND p.id_subcategoria IN ($subs) ");
 
         foreach ($pedidos as $key => $pedido){
             $sql = "SELECT c.descricao AS pergunta, c.id_pergunta, b.descricao AS filtro, a.valor, a.id_filtro "
