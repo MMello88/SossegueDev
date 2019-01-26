@@ -144,143 +144,55 @@
                             $total_visita = 0;
                             $total_resposta = 0;
                             $total = 0;
-                            foreach ($prof->prof_subcategs as $prof_subcateg) {
-                                echo "<input type='radio' class='chb$key_mix' name='selected[id_subcategoria][$prof_subcateg->id_subcategoria]' value='$prof->id_profissional' required>";
-                                if (isset($prof_subcateg->valores_iniciais)){
+                            foreach ($prof->respostas as $key => $valueResposta) {
+                                echo "<input type='radio' class='chb$key_mix' name='selected[id_subcategoria][$valueResposta->id_subcategoria]' value='$prof->id_profissional' required>";
+                                echo "<input type='hidden' name='id_orcamento' value='$prof->id_orcamento'>";
+                                
+                                $sub_total_resposta = 0;
 
-                                    echo "<input type='hidden' name='id_orcamento' value='$prof->id_orcamento'>";
-                                    foreach ($prof_subcateg->valores_iniciais as $key => $valueInicial) {
+                                echo '<br/>';
+                                echo 'id_prof_pergunta_resposta: ' . $valueResposta->id_prof_pergunta_resposta. '<br/>';
+                                echo 'id_prof_enunciado: ' . $valueResposta->id_prof_enunciado. '<br/>';
+                                echo 'id_prof_pergunta: ' . $valueResposta->id_prof_pergunta. '<br/>';
+                                echo 'vlr_primeiro: ' . $valueResposta->vlr_primeiro. '<br/>';
+                                echo 'vlr_adicional: ' . $valueResposta->vlr_adicional. '<br/>';
+                                echo 'vlr_porcent: ' . $valueResposta->vlr_porcent. '<br/>';
+                                echo 'qntd: ' . $valueResposta->vlr_qntd. '<br/>';
+                                echo 'key: ' . $key;
+                                
 
-                                        echo '<br/>';
-                                        echo 'id_prof_pergunta_resposta: ' . $valueInicial->id_prof_pergunta_resposta . '<br/>';
-                                        echo 'id_prof_enunciado: ' . $valueInicial->id_prof_enunciado. '<br/>';
-                                        echo 'id_prof_pergunta: ' . $valueInicial->id_prof_pergunta. '<br/>';
-                                        echo 'vlr_primeiro: ' . $valueInicial->vlr_primeiro. '<br/>';
-                                        echo 'vlr_adicional: ' . $valueInicial->vlr_adicional. '<br/>';
-                                        echo 'vlr_porcent: ' . $valueInicial->vlr_porcent. '<br/>';
-                                        echo 'qntd: ' . $valueInicial->vlr_qntd. '<br/>';
+                                if ($key === 0){
+                                    if ($valueResposta->vlr_qntd === 0 && $valueResposta->qntd === 1) {
+                                        $sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_primeiro;
+                                    } else {
+                                        $sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_primeiro;
+                                        if ($valueResposta->qntd > $valueResposta->vlr_qntd && $valueResposta->qntd > 1)
+                                            $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->qntd-$valueResposta->vlr_qntd-1));
+                                    }
+                                } else {
+                                    $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->qntd));
+                                }
 
+                                echo "<br/>Valor Respondido $sub_total_resposta <br/>";
+                                $total_resposta = $total_resposta + $sub_total_resposta;
 
-                                        /*<input type='hidden' name='id_profissional[$prof_subcateg->id_subcategoria][$prof->id_profissional][]' value='$prof->id_profissional'>
-                                        <input type='hidden' name='nome_profissional[$prof_subcateg->id_subcategoria][$prof->id_profissional][]' value='$prof->nome'>*/                                        									
-                                        if ($valueInicial->tipo === 'valor_minimo_visita'){
-                                            $total_visita = $total_visita + $valueInicial->vlr_primeiro;
-                                        }
+                                
+                                $valueResposta->id_subcategoria = $valueResposta->id_subcategoria;
+                                $valueResposta->id_orcamento = $prof->id_orcamento;
+                                $valueResposta->id_profissional = $prof->id_profissional;
+                                if(isset($valueResposta->Pedido)){
+                                    $valueResposta->id_pedido = $valueResposta->id_pedido;
+                                    unset($valueResposta->Pedido);
+                                }
+                                $value = json_encode($valueResposta);
+                                echo "<input type='hidden' name='resposta[$valueResposta->id_subcategoria][$prof->id_profissional][]' value='$value'>";
+                            
                                     
-                                        echo "Valor da Visita: $total_visita <br/>";
-                                        $total = $total + $total_visita;
-                                        
-                                        $valueInicial->id_subcategoria = $prof_subcateg->id_subcategoria;
-                                        $valueInicial->id_orcamento = $prof->id_orcamento;
-                                        $valueInicial->id_profissional = $prof->id_profissional;
-                                        if(isset($valueInicial->Pedido)){
-                                            $valueInicial->id_pedido = $valueInicial->Pedido->id_pedido;
-                                            unset($valueInicial->Pedido);
-                                        }
-                                        $value = json_encode($valueInicial);
-                                        echo "<input type='hidden' name='resposta[$prof_subcateg->id_subcategoria][$prof->id_profissional][]' value='$value'>";
-                                    }
-                                }
-
-                                if (isset($prof_subcateg->respostas)){
-
-                                    echo "<input type='hidden' name='id_orcamento' value='$prof->id_orcamento'>";
-                                    //print_r($prof_subcategr);
-                                    foreach ($prof_subcateg->respostas as $key => $valueResposta) {
-                                        $sub_total_resposta = 0;
-
-                                        echo '<br/>';
-                                        echo 'id_prof_pergunta_resposta: ' . $valueResposta->id_prof_pergunta_resposta. '<br/>';
-                                        echo 'id_prof_enunciado: ' . $valueResposta->id_prof_enunciado. '<br/>';
-                                        echo 'id_prof_pergunta: ' . $valueResposta->id_prof_pergunta. '<br/>';
-                                        echo 'vlr_primeiro: ' . $valueResposta->vlr_primeiro. '<br/>';
-                                        echo 'vlr_adicional: ' . $valueResposta->vlr_adicional. '<br/>';
-                                        echo 'vlr_porcent: ' . $valueResposta->vlr_porcent. '<br/>';
-                                        echo 'qntd: ' . $valueResposta->vlr_qntd. '<br/>';
-                                        echo 'key: ' . $key;
-                                        
-
-                                        if ($key === 0){
-                                            if ($valueResposta->vlr_qntd === 0 && $valueResposta->Pedido->qntd === 1) {
-                                                $sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_primeiro;
-                                            } else {
-                                                $sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_primeiro;
-                                                if ($valueResposta->Pedido->qntd > $valueResposta->vlr_qntd && $valueResposta->Pedido->qntd > 1)
-                                                    $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->Pedido->qntd-$valueResposta->vlr_qntd-1));
-                                            }
-                                        } else {
-                                            $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->Pedido->qntd));
-                                            /*
-                                            if ($valueResposta->qntd === 0 && $valueResposta->Pedido->qntd === 1) {
-                                                $sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_primeiro;
-                                            } else {
-                                                //$sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_adicional;
-                                                if ($valueResposta->Pedido->qntd > $valueResposta->qntd && $valueResposta->Pedido->qntd > 1)
-                                                    $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->Pedido->qntd));
-                                            }*/
-                                        }
-
-                                        echo "Valor Respondido $sub_total_resposta <br/>";
-                                        $total_resposta = $total_resposta + $sub_total_resposta;
-
-                                        
-                                        $valueResposta->id_subcategoria = $prof_subcateg->id_subcategoria;
-                                        $valueResposta->id_orcamento = $prof->id_orcamento;
-                                        $valueResposta->id_profissional = $prof->id_profissional;
-                                        if(isset($valueResposta->Pedido)){
-                                            $valueResposta->id_pedido = $valueResposta->Pedido->id_pedido;
-                                            unset($valueResposta->Pedido);
-                                        }
-                                        $value = json_encode($valueResposta);
-                                        echo "<input type='hidden' name='resposta[$prof_subcateg->id_subcategoria][$prof->id_profissional][]' value='$value'>";
-                                    }
-                                    $total = $total + $total_resposta;
-                                }
-
-                                $sinal = '';
-                                $porct = 0;
-                                if(isset($prof_subcateg->valores_config)) {
-                                    echo "<input type='hidden' name='id_orcamento' value='$prof->id_orcamento'>";
-                                    foreach ($prof_subcateg->valores_config as $valueValor_Config) {
-
-                                        echo '<br/>';
-                                        echo 'id_prof_pergunta_resposta: ' . $valueValor_Config->id_prof_pergunta_resposta. '<br/>';
-                                        echo 'id_prof_enunciado: ' . $valueValor_Config->id_prof_enunciado. '<br/>';
-                                        echo 'id_prof_pergunta: ' . $valueValor_Config->id_prof_pergunta. '<br/>';
-                                        echo 'vlr_primeiro: ' . $valueValor_Config->vlr_primeiro. '<br/>';
-                                        echo 'vlr_adicional: ' . $valueValor_Config->vlr_adicional. '<br/>';
-                                        echo 'vlr_porcent: ' . $valueValor_Config->vlr_porcent. '<br/>';
-                                        echo 'qntd: ' . $valueValor_Config->qntd. '<br/>';
-
-                                        if ($valueValor_Config->checkbox == 'S'){
-                                            $sinal = $valueValor_Config->sinal;
-                                        } else {
-                                             if ($sinal === '>') {
-                                                $porct = $valueValor_Config->vlr_porcent;
-                                                $total = $total + $total*($porct/100);
-                                            } else if ($sinal === '<'){
-                                                $porct = $valueValor_Config->vlr_porcent;
-                                                $total = $total - $total*($porct/100);
-                                            } else {
-                                                $porct = 0;
-                                            }
-                                        }
-
-                                        $valueValor_Config->id_subcategoria = $prof_subcateg->id_subcategoria;
-                                        $valueValor_Config->id_orcamento = $prof->id_orcamento;
-                                        $valueValor_Config->id_profissional = $prof->id_profissional;
-                                        if(isset($valueValor_Config->Pedido)){
-                                            $valueValor_Config->id_pedido = $valueValor_Config->Pedido->id_pedido;
-                                            unset($valueValor_Config->Pedido);
-                                        }
-                                        $value = json_encode($valueValor_Config);
-                                        echo "<input type='hidden' name='resposta[$prof_subcateg->id_subcategoria][$prof->id_profissional][]' value='$value'>";
-                                    }
-                                }
-                                echo "</br>";
-                                echo "Procentagem $sinal $porct <br/>";
                             }
-                            echo "Total: $total <br/>";
+
+                                echo "</br>";
+                            
+                            echo "Total: $total_resposta <br/>";
                         } ?>
                     </div>
                     <?php } ?> <!-- endforecah profs -->

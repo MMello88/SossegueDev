@@ -171,41 +171,38 @@ class Carrinho extends MY_Front {
             {   
                 foreach ($mix->profs as $keyProf => $prof) 
                 {
-                    foreach ($prof->prof_subcategs as $keyProfSubCateg => $valueProfsubCateg) 
-                    {                       
-                        $in_filtro = "";
-                        foreach($valuePedido->filtros as $keyFiltro => $filtro){
-                          if($keyFiltro == 0)
-                            $in_filtro .= "'$filtro->id_filtro'";
-                          else
-                            $in_filtro .= ",'$filtro->id_filtro'";
+                    $sql_resposta_profs = 
+                        "SELECT * 
+                            FROM tbl_prof_pergunta_resposta r 
+                            LEFT JOIN tbl_prof_pergunta a ON (a.id_prof_pergunta = r.id_prof_pergunta)
+                            LEFT JOIN tbl_prof_enunciado e ON (e.id_prof_enunciado = a.id_prof_enunciado)
+                            LEFT JOIN tbl_prof_pergunta_filtro f ON (f.id_prof_pergunta = r.id_prof_pergunta)
+                            LEFT JOIN tbl_prof_subcateg s ON (r.id_prof_subcateg = s.id_prof_subcateg)
+                            LEFT JOIN tbl_pedido p ON (p.id_subcategoria = s.id_subcategoria)
+                            LEFT JOIN tbl_pedido_filtro pf ON (pf.id_pedido = p.id_pedido)
+                        WHERE s.id_profissional = $prof->id_profissional 
+                            AND s.status = 'a'
+                            AND r.vlr_faz_servico <> 'on'
+                            AND p.id_orcamento = $this->id_orcamento
+                            AND p.id_servico = f.id_servico
+                            AND p.id_categoria_servico = f.id_categoria_servico
+                            AND p.id_subcategoria = f.id_subcategoria
+                            AND p.status <> 'e'
+                            AND (f.id_filtro IS NULL OR f.id_filtro = pf.id_filtro)
+                            AND (f.tipo IS NULL OR f.tipo NOT IN ('c','v'))
+                        ORDER BY r.vlr_primeiro DESC, r.vlr_adicional DESC
+                        ";
+
+                    $mixs[$keyMix]->profs[$keyProf]->respostas = $this->superModel->query( $sql_resposta_profs );
+                    /*foreach ($respostas as $valueResposta) {
+                        if (!isset($mixs[$keyMix]->profs[$keyProf]->respostas)){
+                            $mixs[$keyMix]->profs[$keyProf]->respostas = array();
                         }
+                        $valueResposta->Pedido = $valuePedido;
+                        array_push($mixs[$keyMix]->profs[$keyProf]->respostas, $valueResposta);
+                    }*/
 
-                        $sql_resposta_profs = "  SELECT pr.*, p.tipo, e.id_prof_enunciado
-                                                  FROM tbl_prof_pergunta_resposta pr 
-                                                  LEFT JOIN tbl_prof_pergunta_filtro pf ON (pr.id_prof_pergunta = pf.id_prof_pergunta)
-                                                 INNER JOIN tbl_prof_pergunta p ON (pr.id_prof_pergunta = p.id_prof_pergunta)
-                                                 INNER JOIN tbl_prof_enunciado e ON (e.id_prof_enunciado = p.id_prof_enunciado)
-                                                 WHERE pr.id_prof_subcateg = $valueProfsubCateg->id_prof_subcateg
-                                                   AND pf.id_categoria_servico = $valuePedido->id_categoria_servico
-                                                   AND pf.id_servico = $valuePedido->id_servico
-                                                   AND e.id_subcategoria = $valueProfsubCateg->id_subcategoria";
-                        if (!empty($in_filtro))
-                          $sql_resposta_profs .= " AND pf.id_filtro in ($in_filtro) 
-                                                   AND (pf.tipo is null or pf.tipo = 'o') ";
-                          $sql_resposta_profs .= " ORDER BY pr.vlr_primeiro DESC";
-
-
-                        $respostas = $this->superModel->query( $sql_resposta_profs );
-                        foreach ($respostas as $valueResposta) {
-                            if (!isset($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->respostas)){
-                                $mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->respostas = array();
-                            }
-                            $valueResposta->Pedido = $valuePedido;
-                            array_push($mixs[$keyMix]->profs[$keyProf]->prof_subcategs[$keyProfSubCateg]->respostas, $valueResposta);
-                        }
-                        
-                    }
+                   
                 }
             }
             

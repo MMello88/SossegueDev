@@ -71,17 +71,17 @@
     </div>
   <?php } ?>
 
+  <?php if($pergunta->tem_vlr_qntd == "S") { ?>
+    <div class="w3-third">
+      <label>Qtde</label>
+      <input class="w3-input w3-border" id="<?= $class_va ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_qntd[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_qntd ?>" <?= $readonly ?>>
+    </div>
+  <?php } ?>
+
   <?php if($pergunta->tem_vlr_adicional == "S") { ?>
     <div class="w3-third">
       <label>Adicional</label>
       <input class="w3-input w3-border" id="<?= $class_va ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_adicional[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_adicional ?>" <?= $readonly ?>>
-    </div>
-  <?php } ?>
-
-  <?php if($pergunta->tem_vlr_qntd == "S") { ?>
-    <div class="w3-third">
-      <label>Adicional</label>
-      <input class="w3-input w3-border" id="<?= $class_va ?>" type="text" placeholder="Ex. R$ 100.00" name="vlr_qntd[<?= $pergunta->id_prof_pergunta ?>]" value="<?= $pergunta->vlr_qntd ?>" <?= $readonly ?>>
     </div>
   <?php } ?>
 
