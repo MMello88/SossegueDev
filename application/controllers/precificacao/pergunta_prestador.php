@@ -83,7 +83,6 @@ class Pergunta_Prestador extends MY_Restrita {
 
     public function pergunta($idSubcategoria, $ordem){
         if($_POST) {
-            print_r($_POST);
             $this->load->model('Modelo/Prof_pergunta_resposta');
             foreach ($this->input->post('id_prof_pergunta') as $id_pergunta) {
                 $resposta = array(
@@ -118,7 +117,6 @@ class Pergunta_Prestador extends MY_Restrita {
         $this->data['pagination_enunciado'] = $this->getPaginationEnunciadoPerguntas($idSubcategoria, $ordem);
         $this->data['pagination_subcatego'] = $this->getPaginationSubCategoria($idSubcategoria);
         $this->data['ProfSubCatg'] = $this->getBuildPerguntasResposta($idSubcategoria, $ordem);
-        //$this->data['ProfSubCatg'] = $ProfSubCatg;
 
         $this->layout->view('restrita/valor_mao_obra/pergunta', $this->data);
     }
@@ -393,7 +391,6 @@ class Pergunta_Prestador extends MY_Restrita {
 
             if ($this->Prof_pergunta_resposta->sn_vlr_sinal == "S"){
                 $ListaRespostas = $this->ListaProf_pergunta_respostas->ListaValoresRespondido($this->Prof_pergunta_resposta, $id_subcategoria);
-                //print_r($ListaRespostas);
                 foreach ($ListaRespostas as $Resposta) {
                     $modelo = $this->ListaProf_pergunta_respostas->BuscaPorProf_pergunta_respostas(
                         $Resposta->id_prof_subcateg,

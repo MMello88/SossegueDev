@@ -4,7 +4,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<?php //print_r($ProfSubCatg); ?>
+
 <h3><?php echo $ProfSubCatg->SubCategoria->subcategoria; ?></h3>
 <hr size="0.1" style="border:1px solid ;">
 <br>
