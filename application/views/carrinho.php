@@ -106,7 +106,7 @@
             </div>
         </div>
     </div>
-
+<?print_r($mixs); echo "ncurses_assume_default_colors)"?>
 <?php foreach($mixs as $key_mix => $mix) { ?> <!-- forecah -->
     <!-- Barra com as categorias -->
     <div class="container">
@@ -138,62 +138,61 @@
                     <div class="col-xs-12 col-md-12">
 					<!--<input type="radio" class="chb<?= $key_mix; ?>" name="selected[<?= $key_mix; ?>]" value="<?= $prof->id_profissional; ?>">-->
                         <h5><?= $prof->nome ?></h5>
-                    <?php 
-                        if(isset($prof->prof_subcategs)){
+        <?php 
+            $total_visita = 0;
+            $total_resposta = 0;
+            $total = 0;
+            foreach ($prof->respostas as $key => $valueResposta) {
+                echo "<input type='radio' class='chb$key_mix' name='selected[id_subcategoria][$valueResposta->id_subcategoria]' value='$prof->id_profissional' required>";
+                echo "<input type='hidden' name='id_orcamento' value='$prof->id_orcamento'>";
+                
+                $sub_total_resposta = 0;
 
-                            $total_visita = 0;
-                            $total_resposta = 0;
-                            $total = 0;
-                            foreach ($prof->respostas as $key => $valueResposta) {
-                                echo "<input type='radio' class='chb$key_mix' name='selected[id_subcategoria][$valueResposta->id_subcategoria]' value='$prof->id_profissional' required>";
-                                echo "<input type='hidden' name='id_orcamento' value='$prof->id_orcamento'>";
-                                
-                                $sub_total_resposta = 0;
+                echo '<br/>';
+                echo 'id_prof_pergunta_resposta: ' . $valueResposta->id_prof_pergunta_resposta. '<br/>';
+                echo 'id_prof_enunciado: ' . $valueResposta->id_prof_enunciado. '<br/>';
+                echo 'id_prof_pergunta: ' . $valueResposta->id_prof_pergunta. '<br/>';
+                echo 'vlr_primeiro: ' . $valueResposta->vlr_primeiro. '<br/>';
+                echo 'vlr_adicional: ' . $valueResposta->vlr_adicional. '<br/>';
+                echo 'vlr_porcent: ' . $valueResposta->vlr_porcent. '<br/>';
+                echo 'qntd: ' . $valueResposta->vlr_qntd. '<br/>';
+                echo 'key: ' . $key;
+                
 
-                                echo '<br/>';
-                                echo 'id_prof_pergunta_resposta: ' . $valueResposta->id_prof_pergunta_resposta. '<br/>';
-                                echo 'id_prof_enunciado: ' . $valueResposta->id_prof_enunciado. '<br/>';
-                                echo 'id_prof_pergunta: ' . $valueResposta->id_prof_pergunta. '<br/>';
-                                echo 'vlr_primeiro: ' . $valueResposta->vlr_primeiro. '<br/>';
-                                echo 'vlr_adicional: ' . $valueResposta->vlr_adicional. '<br/>';
-                                echo 'vlr_porcent: ' . $valueResposta->vlr_porcent. '<br/>';
-                                echo 'qntd: ' . $valueResposta->vlr_qntd. '<br/>';
-                                echo 'key: ' . $key;
-                                
+                if ($key === 0){
+                    if ($valueResposta->vlr_qntd === 0 && $valueResposta->qntd === 1) {
+                        $sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_primeiro;
+                    } else {
+                        $sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_primeiro;
+                        if ($valueResposta->qntd > $valueResposta->vlr_qntd && $valueResposta->qntd > 1)
+                            $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->qntd-$valueResposta->vlr_qntd-1));
+                    }
+                } else {
+                    $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->qntd));
+                }
 
-                                if ($key === 0){
-                                    if ($valueResposta->vlr_qntd === 0 && $valueResposta->qntd === 1) {
-                                        $sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_primeiro;
-                                    } else {
-                                        $sub_total_resposta = $sub_total_resposta + $valueResposta->vlr_primeiro;
-                                        if ($valueResposta->qntd > $valueResposta->vlr_qntd && $valueResposta->qntd > 1)
-                                            $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->qntd-$valueResposta->vlr_qntd-1));
-                                    }
-                                } else {
-                                    $sub_total_resposta = $sub_total_resposta + ($valueResposta->vlr_adicional*($valueResposta->qntd));
-                                }
+                echo "<br/>Valor Respondido $sub_total_resposta <br/>";
+                $total_resposta = $total_resposta + $sub_total_resposta;
 
-                                echo "<br/>Valor Respondido $sub_total_resposta <br/>";
-                                $total_resposta = $total_resposta + $sub_total_resposta;
+                
+                $valueResposta->id_subcategoria = $valueResposta->id_subcategoria;
+                $valueResposta->id_orcamento = $prof->id_orcamento;
+                $valueResposta->id_profissional = $prof->id_profissional;
+                if(isset($valueResposta->Pedido)){
+                    $valueResposta->id_pedido = $valueResposta->id_pedido;
+                    unset($valueResposta->Pedido);
+                }
+                $value = json_encode($valueResposta);
+                echo "<input type='hidden' name='resposta[$valueResposta->id_subcategoria][$prof->id_profissional][]' value='$value'>";
+            
+                    
+            }
 
-                                
-                                $valueResposta->id_subcategoria = $valueResposta->id_subcategoria;
-                                $valueResposta->id_orcamento = $prof->id_orcamento;
-                                $valueResposta->id_profissional = $prof->id_profissional;
-                                if(isset($valueResposta->Pedido)){
-                                    $valueResposta->id_pedido = $valueResposta->id_pedido;
-                                    unset($valueResposta->Pedido);
-                                }
-                                $value = json_encode($valueResposta);
-                                echo "<input type='hidden' name='resposta[$valueResposta->id_subcategoria][$prof->id_profissional][]' value='$value'>";
-                            
-                                    
-                            }
+                echo "</br>";
+                
+                echo "Total: $total_resposta <br/>";
+        ?>
 
-                                echo "</br>";
-                            
-                            echo "Total: $total_resposta <br/>";
-                        } ?>
                     </div>
                     <?php } ?> <!-- endforecah profs -->
                 </div>

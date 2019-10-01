@@ -74,6 +74,8 @@ class Carrinho extends MY_Front {
     public function Finalizar(){
         //update no pedido passando orçamento e finalizando todos os pedidos
 
+        print_r($_POST);
+        //die();
         if($_POST){
             
             $data = array(
@@ -127,7 +129,7 @@ class Carrinho extends MY_Front {
                   tbl_prof_subcateg s 
                 LEFT JOIN tbl_profissional p ON (p.id_profissional = s.id_profissional)
                 LEFT JOIN tbl_usuario u ON (u.id_usuario = p.id_usuario)
-                WHERE s.id_subcategoria IN (SELECT pd.id_subcategoria FROM tbl_pedido pd WHERE pd.id_orcamento = $this->id_orcamento GROUP BY pd.id_subcategoria) 
+                WHERE s.id_subcategoria IN (SELECT pd.id_subcategoria FROM tbl_pedido pd WHERE pd.id_orcamento = $this->id_orcamento AND pd.status <> 'e' GROUP BY pd.id_subcategoria) 
                   AND s.status = 'a'
                 GROUP BY s.id_profissional, u.nome ) a
                 ORDER BY 3");

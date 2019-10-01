@@ -143,50 +143,10 @@
                     </div>
                 </div><br /><br /><br />
                 
-                <div p align="center">
+                <div align="center" style="margin: 100px">
                     <div class="list-block__title" color="#999999"><h2>Por que contratar <u><strong>Limpeza de Ar Condicionado<strong></strong></u> pela <strong>Sossegue</strong>?</h1></div>
                     <div class="list-block__info" color="#999999"><h3>A <strong>Sossegue</strong> irá enviar <em><strong>Profissionais</strong></em> altamente qualificados e que passaram por um rigoroso controle de qualidade. Preencha o formulário acima e, dentro de minutos, você receberá <strong>3 orçamentos diferentes</strong>.</h3></div>
 					<div class="list-block__info"><h3>Basta escolher o que melhor lhe atende, que agendaremos o mais rápido possível na data e horário escolhido. Não deixe essa oportunidade passar! Garanta orçamentos que caibam no seu bolso!</h3></div></center>
-                </div>
-
-                <div class="row margin-g">
-                    <div class="section-default  border-bottom_thin wow zoomIn" data-wow-duration="1s">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-xs-12 txt-center">
-                                    <h2 class="ui-title-block">Por que anunciar na sossegue</h2>
-                                    <div class="decor-1 decor-1_mod-a decor-1_mod-d"></div>
-                                </div>
-
-                                <div class="col-xs-12">
-                                    <ul class="advantages advantages_mod-a list-unstyled">
-                                        <li class="advantages__item clearfix">
-                                            <i class="icon flaticon-rocketship4"></i>
-                                            <div class="advantages__inner">
-                                                <div class="advantages__name">CONSIGA AINDA MAIS CLIENTES COM A SOSSEGUE</div>
-                                                <div class="advantages__text">Experimente a plataforma, <a href="<?php echo base_url('cadastro')?>">cadastre-se</a> e Sossegue.</div>
-                                            </div>
-                                        </li>
-                                        <li class="advantages__item clearfix">
-                                            <i class="icon flaticon-badges3"></i>
-                                            <div class="advantages__inner">
-                                                <div class="advantages__name">CADASTRO GRATUITO</div>
-                                                <div class="advantages__text">Você aumenta sua renda e não paga nada para fazer parte da nossa equipe de Sossegados!</div>
-                                            </div>
-                                        </li>
-                                        <li class="advantages__item clearfix">
-                                            <i class="icon flaticon-house158"></i>
-                                            <div class="advantages__inner">
-                                                <div class="advantages__name">AUMENTE SUA EXPOSIÇÃO NA INTERNET</div>
-                                                <div class="advantages__text">Nosso site está entre os primeiros nas buscas do Google! Tenha ainda mais visibilidade na internet!</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div><!-- end col -->
-                            </div><!-- end row -->
-                        </div><!-- end container -->
-                    </div><!-- end section-default -->
-
                 </div>
             </div>
 

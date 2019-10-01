@@ -135,47 +135,6 @@
                         <?php echo form_close(); ?>
                     </div>
                 </div>
-
-
-                <div class="row margin-g">
-                    <div class="section-default  border-bottom_thin wow zoomIn" data-wow-duration="1s">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-xs-12 txt-center">
-                                    <h2 class="ui-title-block">Por que anunciar na sossegue</h2>
-                                    <div class="decor-1 decor-1_mod-a decor-1_mod-d"></div>
-                                </div>
-
-                                <div class="col-xs-12">
-                                    <ul class="advantages advantages_mod-a list-unstyled">
-                                        <li class="advantages__item clearfix">
-                                            <i class="icon flaticon-rocketship4"></i>
-                                            <div class="advantages__inner">
-                                                <div class="advantages__name">CONSIGA AINDA MAIS CLIENTES COM A SOSSEGUE</div>
-                                                <div class="advantages__text">Experimente a plataforma, <a href="<?php echo base_url('cadastro')?>">cadastre-se</a> e Sossegue.</div>
-                                            </div>
-                                        </li>
-                                        <li class="advantages__item clearfix">
-                                            <i class="icon flaticon-badges3"></i>
-                                            <div class="advantages__inner">
-                                                <div class="advantages__name">CADASTRO GRATUITO</div>
-                                                <div class="advantages__text">Você aumenta sua renda e não paga nada para fazer parte da nossa equipe de Sossegados!</div>
-                                            </div>
-                                        </li>
-                                        <li class="advantages__item clearfix">
-                                            <i class="icon flaticon-house158"></i>
-                                            <div class="advantages__inner">
-                                                <div class="advantages__name">AUMENTE SUA EXPOSIÇÃO NA INTERNET</div>
-                                                <div class="advantages__text">Nosso site está entre os primeiros nas buscas do Google! Tenha ainda mais visibilidade na internet!</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div><!-- end col -->
-                            </div><!-- end row -->
-                        </div><!-- end container -->
-                    </div><!-- end section-default -->
-
-                </div>
             </div>
 
         </div>
