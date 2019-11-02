@@ -12,6 +12,55 @@
   		"url": "http://www.sossegue.com.br"
 	}
  </script>
+<style>
+    .panel-tabs {
+        position: relative;
+        bottom: 30px;
+        clear:both;
+        border-bottom: 1px solid transparent;
+    }
+
+    .panel-tabs > li {
+        float: left;
+        margin-bottom: -1px;
+    }
+
+    .panel-tabs > li > a {
+        margin-right: 2px;
+        margin-top: 4px;
+        line-height: .85;
+        border: 1px solid transparent;
+        border-radius: 4px 4px 0 0;
+        color: #ffffff;
+    }
+
+    .panel-tabs > li > a:hover {
+        border-color: transparent;
+        color: #ffffff;
+        background-color: transparent;
+    }
+
+    .panel-tabs > li.active > a,
+    .panel-tabs > li.active > a:hover,
+    .panel-tabs > li.active > a:focus {
+        color: #fff;
+        cursor: default;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        background-color: rgba(255,255,255, .23);
+        border-bottom-color: transparent;
+    }
+    /*========================================  MODIFICAÇÕES TEMPORARIAS ===========================*/
+    .panel-primary > .panel-heading {
+        color: #ffffff;
+        background-color: #486d8b !important;
+        border-color: #355671 !important;
+    }
+    .panel-title{color:#fff !important;}
+    .panel-primary{border-color: #355671 !important; padding-bottom: 10px; margin-top: 40px;}
+</style>
+
     <section class="section_mod-d border-top">
       <div class="container">
         <div class="row">
@@ -20,61 +69,8 @@
                 <h2><strong><?php echo $viewsubcategoria[0]->subtitulo; ?></strong></h2> 
             </div>
           <!-- end col -->
-
             <div class="container">
                 <div class="row">
-
-                <style>
-                    .panel-tabs {
-                        position: relative;
-                        bottom: 30px;
-                        clear:both;
-                        border-bottom: 1px solid transparent;
-                    }
-
-                    .panel-tabs > li {
-                        float: left;
-                        margin-bottom: -1px;
-                    }
-
-                    .panel-tabs > li > a {
-                        margin-right: 2px;
-                        margin-top: 4px;
-                        line-height: .85;
-                        border: 1px solid transparent;
-                        border-radius: 4px 4px 0 0;
-                        color: #ffffff;
-                    }
-
-                    .panel-tabs > li > a:hover {
-                        border-color: transparent;
-                        color: #ffffff;
-                        background-color: transparent;
-                    }
-
-                    .panel-tabs > li.active > a,
-                    .panel-tabs > li.active > a:hover,
-                    .panel-tabs > li.active > a:focus {
-                        color: #fff;
-                        cursor: default;
-                        -webkit-border-radius: 2px;
-                        -moz-border-radius: 2px;
-                        border-radius: 2px;
-                        background-color: rgba(255,255,255, .23);
-                        border-bottom-color: transparent;
-                    }
-                    /*========================================  MODIFICAÇÕES TEMPORARIAS ===========================*/
-                    .panel-primary > .panel-heading {
-                        color: #ffffff;
-                        background-color: #486d8b !important;
-                        border-color: #355671 !important;
-                    }
-                    .panel-title{color:#fff !important;}
-                    .panel-primary{border-color: #355671 !important; padding-bottom: 10px; margin-top: 40px;}
-                </style>
-
-                    
-                        
                     <div class="col-md-7 wow bounceInRight animated" data-wow-duration="1s" style="visibility: visible; animation-duration: 1s;">
                         <div class="section-list-block">
                             <ul class="list-block list-unstyled">
@@ -170,7 +166,7 @@
                             </div>
                         <?php echo form_close(); ?>
                     </div>
-                </div><br /><br /><br />
+                </div>
                 
 
 
