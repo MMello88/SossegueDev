@@ -46,6 +46,7 @@
             <td>
                 <a href="<?php echo base_url('restrita/categorias/editarSubcategoria/' . $subcategoria->id_subcategoria); ?>">Editar</a>
                 <a href="#" data-toggle="modal" data-target="#modalDelete" class="deletar" data-campo="id_subcategoria" data-id="<?php echo $subcategoria->id_subcategoria; ?>" data-tabela="subcategoria">Deletar</a>
+                <a href="<?php echo base_url('restrita/categorias/explicativos/' . $subcategoria->id_subcategoria); ?>">Texto Explicativos</a>
             </td>
         </tr>
         <?php } ?>

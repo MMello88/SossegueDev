@@ -105,7 +105,7 @@ $(document).on('change', 'select',function(){
               } else if (Field.input_type == 't') {
                 $.each(Field.Filtros, function(x,option){
                     Select = Select.concat(         
-                        "<input name=\"id_filtros["+option.id_filtro+"][value]\" value=\"\" placeholder=\"" + Field.pergunta + "\" class=\"form-control\" id=\"DescFiltro\" required>");
+                        "<textarea name=\"id_filtros["+option.id_filtro+"][value]\" value=\"\" placeholder=\"" + Field.pergunta + "\" class=\"form-control\" id=\"DescFiltro\"  required ></textarea>");
                 });
               }
             });
@@ -113,14 +113,14 @@ $(document).on('change', 'select',function(){
         });
     }
 });
-/*
+
 $(document).on('mouseup', '#btn8',function(){
     var $btn = $(this).button('loading');
     setTimeout(function(){
       $btn.button('reset');
     }, 3000);  
 });
-*/
+
 $(document).on('keypress', '#DescFiltro',function(){
     if ($(this).val().length > 26){
         $(this).addClass("word-wrap-select");
@@ -162,12 +162,12 @@ $('.input-group').on('click', '#mais', function(event){
   
   saveQtde(idPedido, idServico, idOrcamento, result);
 });
-/*
+
 $(document).on('mouseup', '#btn8',function(){
   var $btn = $(this).button('loading');
   $btn.css("disabled");
 });
-*/
+
 function saveQtde(idPedido, idServico, idOrcamento, Qtde){
     var security = $("input[name='csrf_test_name']").val();
     $.ajax({
@@ -176,10 +176,14 @@ function saveQtde(idPedido, idServico, idOrcamento, Qtde){
         dataType : "json",
         data : {"id_pedido": idPedido, "id_servico": idServico, "id_orcamento": idOrcamento, "qntd": Qtde, "csrf_test_name": security },
         success : function(data) {
-            //
+            if (data.qntd !=0){
+               
+            } else {
+               
+            }
         },
         error : function(data) {
-            //
+            return false;
         }
     });
 }
@@ -197,59 +201,37 @@ $('#myModalPedido').on('show.bs.modal', function (event) {
   $.getJSON("<?php echo base_url("restrita/pedidos/lista_pedidos"); ?>/" + recipientId , function(result){
     
     modal.find('.modal-title').text('Id para listar o orçamento ' + recipientId);
+    
     var texto = "";
-    $.each(result, function(i, p_sub_grp) {
-        texto = texto.concat("<div class=\"row team-box\">");
-        texto = texto.concat("   <ul class=\"list-unstyled\"> ");
-        var total_visita = 0;
-        var total_resposta = 0;
-        var total = 0;
-
-        $.each(p_sub_grp.profRespPedido, function(y, Resppedido){
-            if(Resppedido.tipo == "valor_minimo_visita"){
-                total_visita = total_visita + Resppedido.vlr_primeiro
+    $.each(result, function(i,pedido) {
+        texto = texto.concat(
+            "<div class=\"row team-box\"> " +
+            "   <div class=\"col-xs-5 col-md-3\"> " +
+            "       <img src=\"<?php echo base_url("assets/media/categoria_servico"); ?>/"+pedido.Servico.categoria.imagem+" \" class=\"img-responsive\" alt=\"Rack\" height=\"100\" width=\"100\" align=\"left\"> " +
+            "   </div> " +
+            "   <div class=\"col-xs-7 col-md-9\"> " +
+            "       <ul class=\"list-unstyled\"> " +
+            "           <li><strong>"+pedido.Servico.categoria.descricao+"</strong></li>" +
+            "           <li>Categoria "+pedido.Servico.categoria.subcategoria.descricao+"</li>" +
+            "           <li>Servico de "+pedido.Servico.descricao+"</li> " +
+            "           <li>Qntde: "+pedido.qntd+"</li> " +
+            "           <li class="+pedido.status+">Status do item: "+pedido.status+"</li> " );
+        
+        $.each(pedido.filtros, function(x,filtro){
+            if (filtro.filtro === ""){
+                texto = texto.concat( "<li>"+filtro.pergunta + ": " + filtro.valor + "</li>" );
+            } else {
+                texto = texto.concat( "<li>"+filtro.pergunta + ": " + filtro.filtro + "</li>" );
             }
-            texto = texto.concat("Valor da Visita:", $total_visita, "<br/>");
-            total = total + total_visita;
-            console.log(Resppedido);
-            texto = texto.concat("<li><strong>"+Resppedido.id_prof_pergunta_resposta_pedido+"</strong></li>");    
         });
-        texto = texto.concat(" </ul> ");
-        $.each(p_sub_grp.pedidos, function(y, pedido){
-
-                        
-            texto = texto.concat(
-                "<div class=\"row\" style=\"margin-left:10px;\"> " +
-                "   <div class=\"col-xs-5 col-md-3\" style=\"padding:0px;\"> " +
-                "       <img src=\"<?php echo base_url("assets/media/categoria_servico"); ?>/"+pedido.Servico.categoria.imagem+" \" class=\"img-responsive\" alt=\"Rack\" height=\"100\" width=\"100\" align=\"left\"> " +
-                "   </div> " +
-                "   <div class=\"col-xs-7 col-md-9\" style=\"padding:0px;\"> " +
-                "       <ul class=\"list-unstyled\"> " +
-                "           <li><strong>"+pedido.Servico.categoria.descricao+"</strong></li>" +
-                "           <li>Categoria "+pedido.Servico.categoria.subcategoria.descricao+"</li>" +
-                "           <li>Servico de "+pedido.Servico.descricao+"</li> " +
-                "           <li>Qntde: "+pedido.qntd+"</li> " +
-                "           <li class="+pedido.status+">Status do item: "+pedido.status+"</li> " );
-            $.each(pedido.filtros, function(x,filtro){
-                if (filtro.filtro === ""){
-                    texto = texto.concat( "<li>"+filtro.pergunta + ": " + filtro.valor + "</li>" );
-                } else {
-                    texto = texto.concat( "<li>"+filtro.pergunta + ": " + filtro.filtro + "</li>" );
-                }
-            });
-            texto = texto.concat(
-                "       </ul>" +
-                "   </div> " +
-                "</div> " );
-                        
-                        
-        });
-
-        texto = texto.concat("</div> ");
-
+        texto = texto.concat(
+            "       </ul>" +
+            "   </div> " +
+            "</div> " );
+    
     });
     modal.find('.modal-body').empty();    
-    if (texto == ""){
+    if (texto === ""){
         modal.find('.modal-body').text('Não foi selecionado nenhum serviço!');
     } else {
         modal.find('.modal-body').append(texto);
@@ -264,17 +246,129 @@ $('#myModalRemoverPedido').on('show.bs.modal', function (event) {
   modal.find('.modal-body').text('Deseja remover o pedido de numero de Id => ' + recipientId);
   modal.find('.modal-body').append("<input name=\"id_orcamento\" value=\""+recipientId+"\" type=\"hidden\" required />");
 });
+
 </script>
 <?php   } ?>
 <?php } ?>
 
 
+<?php if (isset($script_listar_os)) { ?>
+<?php   if ($script_listar_os == 1) { ?>
 <script>
-  $(".cbx").change(function() {
-    $(".cbx").prop('checked', false);
-    $(this).prop('checked', true);
+
+
+$('#myModalOs').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget); 
+  var recipientId = button.data('whatever'); 
+  var modal = $(this);
+
+  $.getJSON("<?php echo base_url("restrita/pedidos_orcamentos/listarPedidos"); ?>/" + recipientId , function(result){
+    
+    modal.find('.modal-title').text('Id para listar Pedido de Orçamento ' + recipientId);
+    var texto = "";
+    
+    if(result.os.prioridade == 'u') {
+      prioridade = 'Urgente';
+    }   
+    if(result.os.prioridade == 'h') {
+      prioridade ='Para Hoje';
+    }
+    if(result.os.prioridade == 's') {
+      prioridade = 'Para essa Semana';
+    }
+    if(result.os.prioridade == 'm') {
+      prioridade = 'Para esse Mes';
+    }
+    
+
+    texto = texto.concat(
+    
+           "<div class=\"form-control\">NRO PEDIDO DE ORÇAMENTO: "+result.os.nro_pedido_de_orcamento+
+           "</div>"+
+
+          "<div class=\"form-control\">NOME APROVADOR: "+result.os.nome_aprov+
+           "</div>"+
+
+
+          "<div class=\"form-control\">NOME REQUERENTE: "+result.os.nome_sol+
+           "</div>"+
+
+           "<div class=\"form-control\">PRIORIDADE: "+prioridade+
+           "</div>"+
+
+   
+           "<div class=\"form-control\">SETOR EMPRESA: "+result.os.localidade+
+           "</div>"+
+
+           
+            "<div class=\"form-control\">NORMAS: "+result.os.normas+
+            "</div>"+
+          
+  
+            "<div class=\"form-control\">QUALIFICAÇÃO: "+result.os.qualificacoes+
+            "</div>"+ 
+      
+          "<div class=\"form-control\">DESCRIÇÃO: "+
+            "</div>");
+      
+      $.each(result.pedidos, function(i, pedido) {
+        texto = texto.concat(
+            
+            "<div class=\"row team-box\"> " +
+            "   <div class=\"col-xs-5 col-md-3\"> " +
+            "       <img src=\"<?php echo base_url("assets/media/categoria_servico"); ?>/"+pedido.Servico.categoria.imagem+" \" class=\"img-responsive\" alt=\"Rack\" height=\"100\" width=\"100\" align=\"left\"> " +
+            "   </div> " +
+            "   <div class=\"col-xs-7 col-md-9\"> " +
+            "       <ul class=\"list-unstyled\"> " +
+            "           <li><strong>"+pedido.Servico.categoria.descricao+"</strong></li>" +
+            "           <li>Categoria "+pedido.Servico.categoria.subcategoria.descricao+"</li>" +
+            "           <li>Servico de "+pedido.Servico.descricao+"</li> " +
+            "           <li>Qntde: "+pedido.qntd+"</li> " +
+            "           <li class="+pedido.status+">Status do item: "+pedido.status+"</li> " );
+        $.each(pedido.filtros, function(x,filtro){
+            if (filtro.filtro === ""){
+                texto = texto.concat( "<li>"+filtro.pergunta + ": " + filtro.valor + "</li>" );
+            } else {
+                texto = texto.concat( "<li>"+filtro.pergunta + ": " + filtro.filtro + "</li>" );
+            }
+        });
+        texto = texto.concat(
+            "       </ul>" +
+            "   </div> " +
+            "</div> " );
+    
+    });
+    modal.find('.modal-body').empty();    
+    if (texto == ""){
+        modal.find('.modal-body').text('Não foi selecionado nenhum serviço!');
+    } else {
+        modal.find('.modal-body').append(texto);
+    }
+  });
+});
+
+
+$('#myModalRemoverOs').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget); 
+  var recipientId = button.data('whatever'); 
+  var modal = $(this);
+  modal.find('.modal-body').text('Deseja remover o pedido de numero de Id => ' + recipientId);
+  modal.find('.modal-body').append("<input name=\"id_pedido_de_orcamento\" value=\""+recipientId+"\" type=\"hidden\" required />");
+});
+
+$('#myModalRemoverUsuario').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget); 
+  var recipientId = button.data('whatever');
+  var modal = $(this);
+  modal.find('.modal-body').text('Deseja realmente excluir este Usuario?');
+  modal.find('.modal-body').append("<input name=\"id_usuario\" value=\""+recipientId+"\" type=\"hidden\" required />");
 });
 </script>
+
+<?php } ?>
+<?php } ?>
+
+
 <?php /* =========================== Script do filtro de busca da listagem do admin ===================================== */ ?>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>

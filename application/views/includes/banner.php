@@ -56,22 +56,15 @@
 
 <div class="row busca-banner">
 	<div class="container">
-		<div class="col-md-7 txt-center txt-banner">
+		<div class="col-md-12 txt-center txt-banner">
 		  <div>
-		        <h1>RECEBA 3 ORÇAMENTOS</h1>
-		        <h6>PROCURAMOS OS MELHORES PROFISSIONAIS DA REGIÃO</h6>
+		        <h1>FAÇA SEU ORÇAMENTO</h1>
+		        <h6>TEMOS OS MELHORES PROFISSIONAIS DA REGIÃO</h6>
 		        <br />
 		        <a href="<?php echo base_url('pedidos'); ?>" class="btn btn-default btn-second btn-effect btn-banner-b">Pedir Orçamento</a>   
 		  </div><br /><br />
 			</div>
-			<div class="col-md-4 txt-center txt-banner">
-				<h2>ANUNCIE SEU SERVIÇO E <br />OBTENHA MAIS CLIENTES</h2><br />
-	   			<a href="<?php echo base_url('cadastro'); ?>" class="btn btn-default btn-second btn-effect btn-banner-b">Anuncie</a>
-			</div>
-		     <div class="form-group col-md-6">    
-		       
-		    </div>
-		</div>
+			
 	</div>
 </div>
 

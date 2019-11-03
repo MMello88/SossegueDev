@@ -1,5 +1,6 @@
 <?php
 if (! defined ( 'BASEPATH' )) exit ( 'No direct script access allowed' );
+
 class Manutencao extends MY_Front {
     
     private $id_manutencao = 1;
@@ -10,15 +11,49 @@ class Manutencao extends MY_Front {
 	   parent::__construct();
     }
     
-    public function index($funcao = '', $cidade = '') {
-        //$this->session->unset_userdata('id_orcamento'); //usar para realizar teste
+    public function index($funcao = '',$cidade = '') {
+		$this->data['cidade'] = $cidade;
+        if($this->session->userdata('contato_cidade') == null){
+            $this->session->set_userdata('contato_cidade', $cidade);
+            $this->data['cidades'] = $this->getCidades($cidade);
+        } else {
+            if(!empty($cidade)){
+                if($this->session->userdata('contato_cidade') <> $cidade){
+                    $this->session->set_userdata('contato_cidade', $cidade);
+                    $this->data['cidades'] = $this->getCidades($cidade);
+                }
+            }
+        }
+        
+        //insertTag('js', 'jquery.maskedinput.min.js', $this->data);  
+        //insertTag('js', 'cadastro.js', $this->data);
+    //$this->session->unset_userdata('id_orcamento'); //usar para realizar teste
+         $data = array(
+            'select' => 'texto',
+            'row' => TRUE,
+            'condicoes' => array(
+                array(
+                    'campo' => 'url',
+                    'valor' => 'termos-e-condicoes'
+                ),
+                array(
+                    'campo' => 'status',
+                    'valor' => 'a'
+                )
+            )
+        );
+
+        $this->data['termos'] = $this->superModel->select('pagina_estatica', $data);
+
+        
         $this->session->set_userdata('inbound_lead', $funcao.'/'.$cidade);
         
         $this->session->set_userdata('url', $funcao);
         
-        insertTag ( 'js', 'jquery.maskedinput.min.js', $this->data );
+        insertTag ( 'js', 'jquery.maskedinput.min.js', $this->data);
+        insertTag ( 'js', 'custom.js', $this->data);
         
-        $this->data['cidades'] = $this->getCidades($cidade);
+          
 		
         $this->data['categoria'] = $this->Menus->getMenu($this->id_manutencao);
 
@@ -45,6 +80,18 @@ class Manutencao extends MY_Front {
                 
                 $this->data['categoria_servicos'] = $categoria_servicos;
                 
+                $clausulas = array(
+                    'row' => true,
+                    'condicoes' => array(
+                        array(
+                            'campo' => 'id_subcategoria',
+                            'valor' => $subcategoria->id_subcategoria
+                        )
+                    )
+                );
+        
+                $this->data['explicativo'] = $this->superModel->select('explicativos', $clausulas);
+				
                 if ($this->session->userdata('id_orcamento')){
                     
                     $this->data['id_orcamento'] = $this->session->userdata('id_orcamento');
@@ -61,7 +108,7 @@ class Manutencao extends MY_Front {
                     
                     $this->layout->view('continuacao-pedido', $this->data);
                 } else
-                    $this->layout->view ( 'manutencao', $this->data );
+                    $this->layout->view ('manutencao', $this->data);
 
                 $encontrou = true;
             }
@@ -72,17 +119,19 @@ class Manutencao extends MY_Front {
         }
     }
    
+
+
     public function Orcamento(){
         insertTag('js', 'jquery.maskedinput.min.js', $this->data);
         
         if($this->form_validation->run('pedidos/realizar')) {
-
+          
             $orcamento = array(
                 'nome'              => $this->input->post('nome'),
                 'email'             => $this->input->post('email'),
                 'celular'           => $this->input->post('celular'),
                 'bairro'            => $this->input->post('bairro'),
-				'id_cidade'         => $this->input->post('id_cidade'),
+                'id_cidade'         => $this->input->post('id_cidade'),
                 'id_subcategoria'   => $this->input->post('subcategoria'),
                 'descricao'         => $this->input->post('descricao'),
                 'data_orcamento'    => date('Y-m-d H:i:s')
@@ -93,13 +142,13 @@ class Manutencao extends MY_Front {
  
             $this->session->set_userdata($orcamento);
             
-            //$this->enviaEmailPedido($data);
+            $this->enviaEmailPedido($orcamento);
             
             $this->inbound_mkting();
             $this->mailchimp();
 			
-			$cidade = $this->getCidadeById($this->input->post('id_cidade'));
-			$this->session->set_userdata($cidade);
+            $cidade = $this->getCidadeById($this->input->post('id_cidade'));
+            $this->session->set_userdata($cidade);
             $this->session->set_userdata('cidade_link', $cidade->link);
             redirect('Manutencao/'.$this->session->userdata('url').'/'. $cidade->link);
         } else {
@@ -157,9 +206,7 @@ class Manutencao extends MY_Front {
                     'id_orcamento' => $this->session->userdata('id_orcamento'),
                     'id_servico'   => $this->input->post('id_servico'),
                     'qntd'         => $this->input->post('qntd'),
-                    'status'       => 'a',
-                    'id_subcategoria'   => $this->input->post('id_subcategoria'),
-                    'id_categoria_servico'   => $this->input->post('id_categoria_servico'),
+                    'status'       => 'a'
                 );
 
                 $idPedido = $this->superModel->insert('pedido', $pedido);
@@ -186,8 +233,11 @@ class Manutencao extends MY_Front {
                         $this->superModel->insert('pedido_filtro', $pedido_filtro);
                     }
                 }
-				$cidade = $this->getCidadeById($this->session->userdata('id_cidade'));
-				redirect('Manutencao/'.$this->session->userdata('url').'/'. $cidade->link);
+                $cidade = $this->getCidadeById($this->session->userdata('id_cidade'));
+                
+                $this->mostrarPopup();
+                
+                redirect('Manutencao/'.$this->session->userdata('url').'/'. $cidade->link);
             } else {
                 $this->index($this->session->userdata('url'));
             }
@@ -218,7 +268,9 @@ class Manutencao extends MY_Front {
         $myJSON = json_encode($perguntas);
         echo $myJSON;
     }
-    
+
+//parte nova inserida fim
+
     private function enviaEmailPedido($data) {
         $configEmail = $this->superModel->getRow('config_email');
         $this->load->library('email');
@@ -462,65 +514,10 @@ class Manutencao extends MY_Front {
         $this->session->unset_userdata('inbound_lead');
     }
 
-    public function getCidades($cidade){
-        if (empty($cidade)){
-            return $this->getAllCidades();
-        } else {
-            $data = array (
-                'select' => '*',
-                'condicoes' => array (
-                    array (
-                        'campo' => 'status',
-                        'valor' => 'a' 
-                    ),
-                    array (
-                        'campo' => 'link',
-                        'valor' => $cidade
-                    )
-                ) 
-            );
-            $cidades = $this->superModel->select ('cidade', $data);
-            if (!empty($cidades)){
-                $this->data['cidade'] = $cidade;
-                return $cidades;
-            }
-            else
-                return $this->getAllCidades();
-        }
+    private function mostrarPopup() {
+
+        $this->session->set_flashdata('suss', "Seu Servico foi inserido com sucesso no Carrinho.");
+
     }
 
-    public function getAllCidades(){
-        $data = array (
-            'select' => '*',
-            'condicoes' => array (
-                array (
-                    'campo' => 'status',
-                    'valor' => 'a' 
-                ) 
-            ) 
-        );
-
-        return $this->superModel->select ( 'cidade', $data );
-    }
-
-    public function getCidadeById($id){
-        $data = array (
-            'select' => '*',
-            'condicoes' => array (
-                array (
-                    'campo' => 'status',
-                    'valor' => 'a' 
-                ),
-                array (
-                    'campo' => 'id',
-                    'valor' => $id
-                )
-            ) 
-        );
-        
-        $cidades = $this->superModel->select ('cidade', $data);
-        if (!empty($cidades))
-            return $cidades[0];
-        return null;
-    }
 }

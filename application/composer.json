@@ -1,5 +1,7 @@
 {
 "require": {
     "hybridauth/hybridauth": "3.0.*"
-	}
+    "phpmailer/phpmailer" : "~6.0"
+
+ }
 }

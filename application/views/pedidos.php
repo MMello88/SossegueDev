@@ -1,4 +1,4 @@
-<title>Tenha 3 Orçamentos de Profissionais de Ribeirão Preto | Sossegue</title>
+<title>Tenha um Orçamento de Profissionais de Ribeirão Preto | Sossegue</title>
 <meta content="Encontre profissionais confiáveis e qualificados, de forma rápida e prática!" name="description">
 <meta name="robots" content="index, follow">
 <meta name=viewport content="width=device-width, initial-scale=1">
@@ -14,7 +14,7 @@
       <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3 wow bounceInLeft txt-center" data-wow-duration="1s">
-                <h1 class="ui-title-block"><strong>RECEBA 3 ORÇAMENTOS</strong> DE PROFISSIONAIS DE <strong>RIBEIRÃO PRETO</strong></h1>
+                <h1 class="ui-title-block"><strong>RECEBA UM ORÇAMENTO</strong> DE PROFISSIONAIS DE <strong>RIBEIRÃO PRETO</strong></h1>
                 <h2>NÃO SE PREOCUPE! SERÃO OS <strong>MELHORES PROFISSIONAIS</strong> COM OS <strong>MENORES PREÇOS</strong>!</h2>
             </div>
           <!-- end col -->
@@ -90,8 +90,15 @@
                     </div>
 
 
+ <div class="container col-md-4 col-md-offset-1 margin_g form_cadastro">
+                        <ul class="nav nav-tabs">
+                        <li class="active"><a   data-toggle="tab" href="#pessoa_fisica">Para minha casa</a></li>
+                        <li><a   data-toggle="tab" href="#pessoa_juridica">Para minha Empresa</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="pessoa_fisica" class="tab-pane fade in active">
 
-                    <div class="col-md-4 col-md-offset-1 margin_g form_cadastro">                        
+                    <div class="form_cadastro">                        
                         <?php echo form_open('pedidos/index', array('id' => 'formCadastro', 'class' => 'bounceInLeft form-b', 'data-wow-duration' => '2s')); ?>
                             <div class="form-request__text form-b col-sm-12">Faça seu Pedido</div>
                             <div class="col-sm-6"><h6>* campos obrigatórios</h6></div><br clear=all/>
@@ -104,19 +111,14 @@
                             <div class="col-sm-12">
                                 <input class="form-control form-b" type="text" id="celular" placeholder="* Celular" name="celular" required>
                             </div>
-                            <div class="col-sm-6">
-                                <select name="categoria" id="categoria" class="form-control form-b" required>
-                                    <option value="" class="option_cad">* CATEGORIA</option>
-                                    <?php foreach($listaCategorias as $categoria) { ?>
-                                    <option value="<?php echo $categoria->id_categoria; ?>" class="option_cad"><?php echo $categoria->categoria; ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                            <div class="col-sm-6">
-                                <select name="subcategoria" id="subcategoria" class="form-control form-b" required>
-                                    <option value="" class="option_cad">* SUBCATEGORIA</option>
-                                </select>
-                            </div>
+                                                                <div>
+                                        <select name="subcategoria" id="subcategoria" class="form-control form-b" required>
+                                            <option value="" class="option_cad">* CATEGORIA</option>
+                                            <?php foreach ($listaSubCategorias as $subCategoria) { ?>
+                                                <option value="<?php echo $subCategoria->id; ?>" class="option_cad"><?php echo $subCategoria->nome; ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
 
                             <?php if (empty($cidade)) { ?>
                                 <div class="col-sm-6">
@@ -132,7 +134,9 @@
                                     <input type="hidden" value="<?php echo $cidades[0]->id; ?> " name="id_cidade">
                                 <?php } ?>
                             <?php } ?>
-
+<div class="checkbox-inline">                                 
+                                <input type="checkbox" value="" class="check-concordo" required>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-family: Helvetica, Arial, sans-serif;">* CONCORDO COM OS <a data-toggle="modal" data-target=".bs-example-modal-lg">TERMOS E CONDIÇÕES</a></span><br /><br />
+                                </div>
                             <?php /*
 							<div class="col-sm-12">
                                 <input class="form-control form-b" type="text" placeholder="* Descrição do Serviço" name="descricao" id="descricao" required>
@@ -143,18 +147,92 @@
                             </div>
                         <?php echo form_close(); ?>
                     </div>
-                </div><br /><br /><br />
+
+
+
+ </div>
+
+                    <div id="pessoa_juridica" class="tab-pane fade">  
+                                     
+                      <?php echo form_open('cadastro/cadastrar', array('id' => 'formCadastro', 'class' => 'bounceInLeft form-b', 'data-wow-duration' => '2s')); ?>
+                           </br><div class="form-request__text form-b">Cadastre-se agora</div>
+                            <div class="col-sm-6"><h6>* campos obrigatórios</h6></div><br clear=all />
+                            <div>
+                                <input class="form-control form-b" type="text" id="cnpj" placeholder="* CNPJ" name="cnpj" required>
+                            </div>
+                            <div >
+                                <input class="form-control form-b" type="text" placeholder="* Nome Fantasia" name="nome" id="nome" required>
+                            </div>
+                            <div>
+                                <input class="form-control form-b" type="mail" placeholder="* email" name="email"required>
+                            </div>
+                            <div>
+                                <input class="form-control form-b" type="text" id="telefone" placeholder="* Telefone" name="telefone" title="Preencha o campo * Telefone com telefone da sua empresa." required>
+                            </div>
+                            <div>
+                                <input class="form-control form-b" type="password" placeholder="* Senha (min seis caracteres)" name="senha" id="senha" minlength=6 required >
+                            </div>
+                            <div>
+                                <input class="form-control form-b" type="password" placeholder="* Confirmar senha" id="confSenha" minlength=6 required>
+                            </div> 
+                         
+                                 <?php if (!empty($cidade)) { ?>
+                            <div>
+                                    <select name="id_cidade" class="form-control form-b">
+                                    <option class="option_cad"><strong> SELECIONE A CIDADE</strong></option>
+                                    <?php foreach($cidades as $cidade) { ?> <!-- forecah -->
+                                        <option value="<?php echo $cidade->id; ?>" class="option_cad"><strong><?php echo $cidade->nome; ?></strong></option>
+                                     
+                                    <?php } ?>
+                               </select>
+                                
+                                </div>
+                                <?php } else { ?>
+                                <?php if (empty($cidades)) { ?> 
+                                    <input type="hidden" value="<?php echo $cidades[0]->id; ?> " name="id_cidade">
+                                <?php } ?>
+                                <?php } ?>
+                               
+                                <div class="checkbox-inline">                                 
+                                <input type="checkbox" value="" class="check-concordo" required>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-family: Helvetica, Arial, sans-serif;">* CONCORDO COM OS <a data-toggle="modal" data-target=".bs-example-modal-lg">TERMOS E CONDIÇÕES</a></span><br /><br />
+                                </div>
+
+
+                                <div class="form-btn-submit">
+                                <button class="btn btn-default btn-block btn-second btn-effect">Cadastrar</button>
+                            </div>
+                        <?php echo form_close(); ?>
+                    </div>
+                </div>
+
+
+
+                </div>
+</div><br /><br /><br />
                 
                 <div align="center" style="margin: 100px">
                     <div class="list-block__title" color="#999999"><h2>Por que contratar <u><strong>Profissionais</strong></u> pela Sossegue?</h2></div>
-                    <div class="list-block__info" color="#999999"><h3>A Sossegue irá enviar <em><strong>Profissionais</strong></em> altamente qualificados e que passaram por um rigoroso controle de qualidade. Preencha o formulário acima e, dentro de minutos, você receberá <strong>3 orçamentos diferentes</strong>.</h3></div>
-					<div class="list-block__info"><h3>Basta escolher o que melhor lhe atende, que agendaremos o mais rápido possível na data e horário escolhido. Não deixe essa oportunidade passar! Garanta orçamentos que caibam no seu bolso!</h3></div></center>
+                    <div class="list-block__info" color="#999999"><h3>A Sossegue irá enviar <em><strong>Profissionais</strong></em> altamente qualificados e que passaram por um rigoroso controle de qualidade. Preencha o formulário acima e receba seu orçamento.</h3></div>
+					<div class="list-block__info"><h3>Agendaremos o mais rápido possível seu serviço na data e horário escolhido. Não deixe essa oportunidade passar! Garanta um orçamento que caiba no seu bolso!</h3></div></center>
                 </div>
             </div>
 
         </div>
       </div>
     </section>
+
+<?php if($termos) { ?>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg modal-termos">
+        <div class="modal-content txt-cinza">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"><?php echo $termos->texto; ?></div>
+        </div>
+    </div>
+</div>
+<?php } ?>
 
     <?php if($this->session->flashdata('msg')) { ?>
     <div class="modal fade" id="modalCadastro" tabindex="-1" role="dialog" style="margin-top: 80px">

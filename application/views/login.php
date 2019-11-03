@@ -1,4 +1,4 @@
-<title>Receba 3 Orçamentos de Manutenção em Minutos | Sossegue</title>
+<title>Receba um Orçamento de Manutenção em Minutos | Sossegue</title>
 <meta content="Encontre profissionais confiáveis e qualificados, de forma rápida e prática!" name="description">
 <meta name="robots" content="noindex, nofollow">
 <meta name=viewport content="width=device-width, initial-scale=1">
@@ -82,13 +82,6 @@
                     <div>
                         <h2 style="color: #DAA520;"> Ainda não é cadastrado? É muito fácil. </h2>
                         <br /><br />
-                    <div>
-                        <h2>Sou prestador de serviços</h2>
-                        <h6> A Sossegue aproxima ainda mais você de seus clientes!<br />
-                            Crie seu perfil e conquiste mais clientes.</h6>
-                        <br />
-                        <a href="<?php echo base_url('cadastro'); ?>" class="btn btn-default btn-second btn-effect btn-banner-b">Anuncie</a>
-                    </div><br /><br />
                         <h2>Busco um Profissional</h2>
                         <h6>Encontre facilmente prestadores de serviços na sua cidade! <br />É fácil! É rápido!</h6>
                         <br />
@@ -96,6 +89,10 @@
                     </div><br /><br />
                 </div>
             </div>
+
+
+
+                
             </div>
 
 

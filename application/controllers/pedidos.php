@@ -69,6 +69,45 @@ class Pedidos extends MY_Front {
 
 			$this->data['listaCategorias'] = $this->superModel->select('categoria', $clausulas);
 
+            $clausulas = array(
+                'select' => 'id_subcategoria AS id, subcategoria AS nome',
+                'condicoes' => array(
+                    array(
+                        'campo' => 'status',
+                        'valor' => 'a'
+                    ),
+                    array(
+                        'campo' => 'id_categoria',
+                        'valor' => 1
+                    )
+                ),
+                'order' => array(
+                    array(
+                        'campo' => 'nome'
+                    )
+                )
+            );
+
+            $this->data['listaSubCategorias'] = $this->superModel->select('subcategoria', $clausulas);
+
+//$this->session->unset_userdata('id_orcamento'); //usar para realizar teste
+         $data = array(
+            'select' => 'texto',
+            'row' => TRUE,
+            'condicoes' => array(
+                array(
+                    'campo' => 'url',
+                    'valor' => 'termos-e-condicoes'
+                ),
+                array(
+                    'campo' => 'status',
+                    'valor' => 'a'
+                )
+            )
+        );
+
+        $this->data['termos'] = $this->superModel->select('pagina_estatica', $data);
+
 
 			//$this->data['estados'] = $this->superModel->select('estado');
             $data = array(

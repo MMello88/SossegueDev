@@ -1,5 +1,5 @@
     <?php include_once('includes/banner.php'); ?>
-    <title>Receba 3 Orçamentos de Manutenção em Minutos | Sossegue</title>
+    <title>Faça Orçamentos de Manutenção em Minutos | Sossegue</title>
 	<meta content="Encontre profissionais confiáveis e qualificados, de forma rápida e prática!" name="description">
 	<meta name="robots" content="index, follow">
 	<meta name=viewport content="width=device-width, initial-scale=1">
@@ -16,7 +16,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6 col-md-offset-3 wow bounceInLeft txt-center" data-wow-duration="1s">
-            <h1 class="ui-title-block">Como Funciona</h1>
+            <h2 class="ui-title-block">Como Funciona</h2>
             <h5>Nós te ajudamos a contratar o melhor<br /> profissional para o serviço que você precisa.</h5>
           </div>
           <!-- end col -->
@@ -43,7 +43,7 @@
                 <div class="col-md-12 txt-center seta-como-funciona"><i class="fa fa-chevron-down"></i></div>
                 <li class="list-block__item"> 
                   <a class="list-block__link">
-                    <div class="list-block__title txt-center"><h3>Entraremos em contato em instantes, fornecendo 3 orçamentos</h3></div>
+                    <div class="list-block__title txt-center"><h3>Entraremos em contato em instantes, fornecendo o orçamento</h3></div>
                   </a>
                 </li>
                 <div class="col-md-12 txt-center seta-como-funciona"><i class="fa fa-chevron-down"></i></div>

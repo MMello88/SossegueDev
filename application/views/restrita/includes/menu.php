@@ -1,11 +1,11 @@
-<div class="col-sm-3 col-md-3">
-    <div class="panel-group" id="accordion">
-
+<div class="col-sm-3 col-md-2">
+   <div class="panel-group " id="accordion">
+ 
+     
         <?php foreach($menuRestrita as $key => $menu) { ?>
-        <?php if($menu->nome !== 'Relatório' || ($menu->nome === 'Relatório' && $this->session->userdata('tipo') === 'Profissional' && $this->session->userdata('plano') === 'Avançado')) { ?>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4 class="panel-title">
+                <h4 class="panel-title" >
                     <?php if(isset($menu->submenus)) { ?>
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $key + 1; ?>"><?php echo $menu->nome; ?></a>
                     <?php } else { ?>
@@ -27,8 +27,7 @@
             </div>
             <?php } ?>
         </div>
-        <?php } ?>
-        <?php } ?>
-
-    </div>
+        <?php } ?> 
+      
+</div>
 </div>

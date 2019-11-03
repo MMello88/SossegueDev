@@ -22,3 +22,7 @@ $.src="//v2.zopim.com/?4DjB4UZqyo4AoPixwvJypIenQasYvrnh";z.t=+new Date;$.
 type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 </script>
 <!--End of Zopim Live Chat Script-->
+
+<script type="text/javascript">
+    var base_url = '<?php echo base_url(); ?>';
+</script>

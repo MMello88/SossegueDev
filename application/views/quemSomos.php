@@ -1,4 +1,4 @@
-<title>Quem Somos - Receba 3 Orçamentos | Sossegue</title>
+<title>Quem Somos - Receba um Orçamento | Sossegue</title>
 <meta content="Encontre profissionais confiáveis e qualificados, de forma rápida e prática!" name="description">
 <meta name="robots" content="index, follow">
 <meta name=viewport content="width=device-width, initial-scale=1">
